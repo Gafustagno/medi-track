@@ -1,18 +1,23 @@
-import { View } from 'react-native'
-import EmptyState from '../../components/EmptyState'
+import { FlatList, View } from 'react-native'
 import Header from '../../components/Header'
+import MedicationList from '../../components/MedicationList'
 
 export default function HomeScreen() {
   return (
-    <View style={{
-      padding:25, 
-      backgroundColor:'white',
-      height:'100%',
-      width:'100%'
-    }}>
-      <Header/>
-
-      <EmptyState/>
-    </View>
+    <FlatList
+        data={[]}
+        style={{
+          padding:20,
+          backgroundColor:'white',
+          height:'100%',
+         
+        }}
+        ListHeaderComponent={
+          <View >
+            <Header/>
+            <MedicationList/>
+          </View>
+        }
+        />
   )
 }

@@ -36,7 +36,7 @@ export default function AddMedicationForm() {
        if(!(formData?.name||formData?.type||formData?.dose||formData?.startDate||formData?.endDate||formData?.reminder))
        {
          
-          Alert.alert('Enter all fields');
+          Alert.alert('Entre todos os campos');
           return ;
        }
     
@@ -54,7 +54,7 @@ export default function AddMedicationForm() {
     
             console.log('Date Saved!');
             setLoading(false);
-            Alert.alert('Great!','New Medicationed added successfully!',[
+            Alert.alert('Ótimo!','Medicamento cadastrado com sucesso!',[
               {
                 text:'Ok',
                 onPress:()=>router.push('(tabs)')

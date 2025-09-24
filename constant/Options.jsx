@@ -34,5 +34,5 @@ export const WhenToTake=[
     'Evening',
     'Before Dinner',
     'After Dinner',
-    'Before Sleeping'
+    'Before Sleeping',
 ]

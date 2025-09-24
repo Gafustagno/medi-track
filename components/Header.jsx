@@ -1,11 +1,13 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constant/Colors';
 import { getLocalStorage } from '../service/Storage';
 
 export default function Header() {
 
+    const router=useRouter();
     const [user, setUser]=useState();
     useEffect(()=>{
         GetUserDetail();
@@ -49,7 +51,9 @@ export default function Header() {
         }}>Hello {user?.displayName} 👋</Text>
 
         </View>
-        <Ionicons name="settings-outline" size={34} color={Colors.DARK_GRAY} />
+        <TouchableOpacity onPress={()=>router.push('/add-new-medication')}>
+        <Ionicons name="medkit-outline" size={34} color={Colors.DARK_GRAY} />
+        </TouchableOpacity>
       </View>
     </View>
   )
