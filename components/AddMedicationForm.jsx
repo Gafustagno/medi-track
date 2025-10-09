@@ -52,7 +52,7 @@ export default function AddMedicationForm() {
               dates:dates
             });
     
-            console.log('Date Saved!');
+            console.log('Data Registrada!');
             setLoading(false);
             Alert.alert('Ótimo!','Medicamento cadastrado com sucesso!',[
               {
@@ -71,11 +71,11 @@ export default function AddMedicationForm() {
     <View style={{
       padding:25
     }}>
-      <Text style={styles.header}>Add New Medication</Text>
+      <Text style={styles.header}>Adicionar Novo Medicamento</Text>
 
       <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
-          <TextInput style={styles.textInput} placeholder='Medicine Name'
+          <TextInput style={styles.textInput} placeholder='Nome do Medicamento'
             onChangeText={(value)=> onHandleInputChange('name',value)}
           />
       </View>
@@ -104,15 +104,15 @@ export default function AddMedicationForm() {
         )}
       />
 
-        {/* Does Input */}
+        {/* input de doses */}
         <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="eyedrop-outline" size={24} color="black" />
-          <TextInput style={styles.textInput} placeholder='Dose Ex.2, 5ml'
+          <TextInput style={styles.textInput} placeholder='Dose - Ex: 2,5ml'
             onChangeText={(value)=> onHandleInputChange('dose',value)}
           />
       </View>
 
-        {/* When To Take Dropdown  */}
+        {/* dropdown quando tomar  */}
               <View style={styles.inputGroup}>
                 <Ionicons style={styles.icon} name="time-outline" size={24} color="black" />
                 <Picker
@@ -131,7 +131,7 @@ export default function AddMedicationForm() {
                 </Picker>
               </View>
         
-          {/* Start and End Date  */}
+          {/* data inicial e final  */}
               <View style={styles.dateInputGroup}>
                 <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
                 onPress={()=>setShowStartDate(true)}
@@ -164,13 +164,13 @@ export default function AddMedicationForm() {
                   />}
               </View>
 
-          {/* Set Reminder Input  */}
+          {/* selecionar horario  */}
                 <View style={styles.dateInputGroup}>
                   <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
                   onPress={()=>setShowTimePicker(true)}
                   >
                     <Ionicons style={styles.icon} name="timer-outline" size={24} color="black" />
-                    <Text style={styles.text}>{formData?.reminder??'Select Reminder Time'}</Text>
+                    <Text style={styles.text}>{formData?.reminder??'Selecionar Horário'}</Text>
                    
                   </TouchableOpacity>
           
@@ -190,7 +190,7 @@ export default function AddMedicationForm() {
                   onPress={()=>SaveMedication()}
                   >
                    {loading? <ActivityIndicator size={'large'} color={'white'}/>:
-                    <Text style={styles.buttontext}>Add New Medication</Text>}
+                    <Text style={styles.buttontext}>Adicionar Novo Medicamento</Text>}
                   </TouchableOpacity>
 
     </View>

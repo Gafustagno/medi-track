@@ -18,8 +18,8 @@ export default function SignUp() {
       
       if(!email || !password|| !userName)
         {
-          ToastAndroid.show('Please fill all details', ToastAndroid.BOTTOM)
-          Alert.alert('Please Enter Email and Password')
+          ToastAndroid.show('Preencha todos os campos', ToastAndroid.BOTTOM)
+          Alert.alert('Por favor, preencha e-mail e senha')
           return;
         }
 
@@ -43,8 +43,8 @@ export default function SignUp() {
           console.log(errorCode);
           if(errorCode=='auth/email-already-in-use')
           {
-            ToastAndroid.show('Email already exist', ToastAndroid.BOTTOM)
-            Alert.alert('Email already in exist')
+            ToastAndroid.show('E-mail já cadastrado', ToastAndroid.BOTTOM)
+            Alert.alert('E-mail já cadastrado')
           }
           // ..
         });
@@ -53,13 +53,13 @@ export default function SignUp() {
     <View style={{
             padding:25
         }}>
-          <Text style={styles.textHeader}>Create New Account</Text>
+          <Text style={styles.textHeader}>Criar nova conta</Text>
           
           <View style={{
             marginTop:25
           }}>
-            <Text>Full Name</Text>
-            <TextInput placeholder='Full Name'
+            <Text>Nome completo</Text>
+            <TextInput placeholder='Nome completo'
             onChangeText={(value)=>setUserName(value)}
             style={styles.textInput}/>
           </View>
@@ -76,8 +76,8 @@ export default function SignUp() {
           <View style={{
             marginTop:25
           }}>
-            <Text>Password</Text>
-            <TextInput placeholder='Password' style={styles.textInput}
+            <Text>Senha</Text>
+            <TextInput placeholder='Senha' style={styles.textInput}
             onChangeText={(value)=>setPassword(value)}
             secureTextEntry={true}
             /> 
@@ -90,7 +90,7 @@ export default function SignUp() {
                 fontSize:17,
                 color:'white',
                 textAlign:'center'
-            }}>Create Account</Text>
+            }}>Criar conta</Text>
           </TouchableOpacity>
     
           <TouchableOpacity style={styles.buttonCreate}
@@ -100,7 +100,7 @@ export default function SignUp() {
                 fontSize:17,
                 color:Colors.PRIMARY,
                 textAlign:'center'
-            }}>Already Account? Sign in</Text>
+            }}>Já tem uma conta? Faça login</Text>
           </TouchableOpacity>
     
         </View>

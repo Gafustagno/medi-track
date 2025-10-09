@@ -45,9 +45,9 @@ export default function MedicationCardItem({medicine,selectedDate=''}) {
         </View>
 
       {status?.date&&  <View style={styles.statusContainer}>
-            {status?.status=='Taken'?<Ionicons name="checkmark-circle" 
+            {status?.status=='Tomou'?<Ionicons name="checkmark-circle" 
             size={24} color={Colors.GREEN} />:
-            status?.status=='Missed'&&
+            status?.status=='Não Tomou' &&
             <Ionicons name="close-circle" 
             size={24} color={'red'} />}
         </View>}

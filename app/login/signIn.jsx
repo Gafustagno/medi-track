@@ -16,7 +16,7 @@ export default function SignIn() {
 
       if(!email || !password)
       {
-        Alert.alert("Please enter email & password")
+        Alert.alert("Informe e-mail e senha")
         return;
       }
 
@@ -34,17 +34,18 @@ export default function SignIn() {
         const errorMessage = error.message;
         if(errorCode=="auth/invalid-credential")
         {
-          Alert.alert('Invalid email or password')
+          Alert.alert('E-mail ou senha inválidos')
         }
       });
     }
+
+  
   return (
     <View style={{
         padding:25
-    }}>
-      <Text style={styles.textHeader}>Lets Sign You In</Text>
-      <Text style={styles.subText}>Welcome Back</Text>
-      <Text style={styles.subText}>You have been missed!</Text>
+    }}>      {/* melhor tirar isso */}
+      <Text style={styles.textHeader}>Boas-vindas</Text>
+      <Text style={styles.subText}>Que bom que voltou!</Text>      
 
       <View style={{
         marginTop:25
@@ -58,8 +59,8 @@ export default function SignIn() {
       <View style={{
         marginTop:25
       }}>
-        <Text>Password</Text>
-        <TextInput placeholder='Password' style={styles.textInput}
+        <Text>Senha</Text>
+        <TextInput placeholder='Senha' style={styles.textInput}
         secureTextEntry={true}
         onChangeText={(value)=>setPassword(value)}
         />
@@ -82,7 +83,7 @@ export default function SignIn() {
             fontSize:17,
             color:Colors.PRIMARY,
             textAlign:'center'
-        }}>Create Account</Text>
+        }}>Criar conta</Text>
       </TouchableOpacity>
 
     </View>

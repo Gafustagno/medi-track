@@ -23,7 +23,7 @@ export default function MedicationActionModal() {
                 })
             });
 
-            Alert.alert(status,'Resposta OK!',[
+            Alert.alert(status,'Registrado!',[
                 {
                     text:'Ok',
                     onPress:()=>router.replace('(tabs)')
@@ -52,13 +52,13 @@ export default function MedicationActionModal() {
         
         <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.closeBtn}
-            onPress={()=>UpdateActionStatus('Náo Tomou')}
+            onPress={()=>UpdateActionStatus('Não Tomou')}
             >
                     <Ionicons name="close-outline" size={24} color="red" />
                     <Text style={{
                         fontSize:20,
                         color:'red'
-                    }}>Náo Tomou</Text>
+                    }}>Não Tomou</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.successBtn}
              onPress={()=>UpdateActionStatus('Tomou')}
@@ -67,7 +67,7 @@ export default function MedicationActionModal() {
                     <Text style={{
                         fontSize:20,
                         color:'white'
-                    }}>Taken</Text>
+                    }}>Tomou</Text>
             </TouchableOpacity>
         </View>
         <TouchableOpacity

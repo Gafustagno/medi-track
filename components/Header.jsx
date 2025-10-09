@@ -48,7 +48,7 @@ export default function Header() {
         <Text style={{
             fontSize:25,
             fontWeight:'bold'
-        }}>Hello {user?.displayName} 👋</Text>
+        }}>Olá, {user?.displayName} 👋</Text>
 
         </View>
         <TouchableOpacity onPress={()=>router.push('/add-new-medication')}>

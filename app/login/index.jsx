@@ -35,7 +35,7 @@ export default function LoginScreen() {
             textAlign: 'center',
           }}
         >
-          Stay on Track, Stay Health!
+          Viva com saúde no apocalipse!
         </Text>
 
         <Text
@@ -46,7 +46,7 @@ export default function LoginScreen() {
             marginTop: 20,
           }}
         >
-          Track your meds, take control of your health. Stay consistent, stay confident
+          Controle seus remédios. Cuidar da saúde é mais fácil do que matar zumbi.
         </Text>
 
           <TouchableOpacity style={styles?.button}
@@ -56,12 +56,12 @@ export default function LoginScreen() {
                 textAlign:'center',
                 fontSize:16,
                 color:Colors.PRIMARY
-            }}>Continue</Text>
+            }}>Continuar</Text>
           </TouchableOpacity>
           <Text style={{
             color:'white',
             marginTop:4
-          }}>Note: By Clicking Continue button, you will agree to our termas and conditions</Text>
+          }}>Nota: Ao clicar no botão Continuar, você concorda com nossos termos e condições</Text>
       </View>
     </View>
   );
