@@ -104,7 +104,7 @@ export default function History() {
           fontWeight:'bold',
           color:Colors.GRAY,
           textAlign:'center'
-        }}>Nenhum medicamento foi encontrado</Text>
+        }}>Nenhum medicamento encontrado</Text>
         }
 
     </View>}

@@ -23,7 +23,7 @@ export default function MedicationActionModal() {
                 })
             });
 
-            Alert.alert(status,'Response Saved!',[
+            Alert.alert(status,'Resposta OK!',[
                 {
                     text:'Ok',
                     onPress:()=>router.replace('(tabs)')
@@ -46,22 +46,22 @@ export default function MedicationActionModal() {
         />
         <Text style={{fontSize:18}}>{medicine?.selectedDate}</Text>
         <Text style={{fontSize:38,fontWeight:'bold',color:Colors.PRIMARY}}>{medicine?.reminder}</Text>
-        <Text style={{fontSize:18}}>It's time to take</Text>
+        <Text style={{fontSize:18}}>É hora de tomar</Text>
         
         <MedicationCardItem medicine={medicine}/>
         
         <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.closeBtn}
-            onPress={()=>UpdateActionStatus('Missed')}
+            onPress={()=>UpdateActionStatus('Náo Tomou')}
             >
                     <Ionicons name="close-outline" size={24} color="red" />
                     <Text style={{
                         fontSize:20,
                         color:'red'
-                    }}>Missed</Text>
+                    }}>Náo Tomou</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.successBtn}
-             onPress={()=>UpdateActionStatus('Taken')}
+             onPress={()=>UpdateActionStatus('Tomou')}
             >
                     <Ionicons name="checkmark-outline" size={24} color="white" />
                     <Text style={{

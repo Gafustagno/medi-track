@@ -12,19 +12,19 @@ export default function Profile() {
   const Menu = [
     {
       id: 1,
-      name: 'Add New Medication',
+      name: 'Adicionar Medicamento',
       icon: 'add-circle',
       path: '/add-new-medication'
     },
     {
       id: 5,
-      name: 'My Medication',
+      name: 'Meus Medicamentos',
       icon: 'medkit',
       path: '(tabs)'
     },
     {
       id: 2,
-      name: 'History',
+      name: 'Histórico',
       icon: 'time',
       path: '/History'
     },
@@ -68,7 +68,7 @@ export default function Profile() {
       <Text style={{
         fontFamily: 'outfit-medium',
         fontSize: 30
-      }}>Profile</Text>
+      }}>Perfil</Text>
 
       <View style={{
         display: 'flex',
