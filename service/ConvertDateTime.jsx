@@ -5,7 +5,7 @@ export const FormatDate=(timestamp)=>{
 }
 
 export const formatDateForText=(date)=>{
-    return moment(date).format('ll')
+    return moment(date).format('ll') //aqui foi usado 'll' mas mais abaixo há dois casos de 'L'. Uniformizar!
 }
 
 export const formatTime=(timestamp)=>{
@@ -36,7 +36,7 @@ export const getDatesRange=(startdate,endDate)=>{
 
 /**
  * 
- * @returns Get Next & Days List
+ * @returns // pega a data atual e os próximos 7 dias
  */
 export const GetDateRangeToDisplay=()=>{
     const dateList=[];

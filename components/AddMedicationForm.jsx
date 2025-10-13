@@ -33,6 +33,11 @@ export default function AddMedicationForm() {
    const SaveMedication=async()=>{
        const docId=Date.now().toString();
        const user=await getLocalStorage('userDetail');
+
+       // validação deveria ser com &&. Está passando quando não preenche tudo.
+       // Precisa bloquear o envio tb se estiver em Quando Tomar, q é soh um placeholder.
+       // Ajustar!
+       
        if(!(formData?.name||formData?.type||formData?.dose||formData?.startDate||formData?.endDate||formData?.reminder))
        {
          

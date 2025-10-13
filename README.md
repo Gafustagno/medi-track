@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# Projeto
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+React Native app desenvolvido com [Expo](https://expo.dev).
+Autenticação e banco de dados via Firebase (Auth + Firestore).
 
-## Get started
+[`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-1. Install dependencies
+O desenvolvimento inicia na pasta **app**. A navegação dos arquivos é feita via Expo Router [file-based routing](https://docs.expo.dev/router/introduction).
+
+## Instalação inicial
+
+1. Instalar dependências (node modules)
 
    ```bash
    npm install
    ```
+   Todas as dependências usadas no projeto estão no arquivo package.json
 
-2. Start the app
+2. Rodar aplicação
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Emuladores
+
+Para este projeto, usamos Android Studio
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Expo Go](https://expo.dev/go) - sandbox
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Iniciando uma aplicação nova
 
-## Get a fresh project
-
-When you're ready, run:
+ Resetar para um projeto novo
 
 ```bash
 npm run reset-project
 ```
+Isso cria um diretório chamado **app-example** e cria uma pasta nova chamada **app** para que você inicie o projeto.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Autenticação
 
-## Learn more
+O arquivo FirebaseConfig com a API KEY precisa ser feito do zero porque está no arquivo .gitignore.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Pastas e detalhamentos
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+app /> - diretório com todas as telas e a navegação.
+components /> - diretório com todos os componentes reutilizáveis da aplicação
+constant /> - diretório com valores estáticos (cores, tipos de medicamentos e textos)
+service /> - diretório com utilitário de conversão de data/hora, armazenamento do async storage e configurações do firebase
 
-## Join the community
 
-Join our community of developers creating universal apps.
+## Deploy
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Criado arquivo .apk
+
+# Icones
+@expo/vector-icons@15.0.2
+Vector Icons and Stickers - PNG, SVG, EPS, PSD e CSS
+scrap de imagens e sons do jogo Project Zomboid (Steam)
+
+
+## Documentação
+
+- [Expo documentation](https://docs.expo.dev/) [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/)
+
+## Comunidade Expo Dev
+
+- [Expo on GitHub](https://github.com/expo/expo)
+- [Discord community](https://chat.expo.dev)
