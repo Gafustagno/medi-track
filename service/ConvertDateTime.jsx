@@ -1,68 +1,63 @@
-import moment from "moment"
+import moment from "moment";
+import "moment/locale/pt-br";
 
-export const FormatDate=(timestamp)=>{
-    return new Date(timestamp).setHours(0,0,0,0)
-}
+moment.locale("pt-br");
 
-export const formatDateForText=(date)=>{
-    return moment(date).format('ll') //aqui foi usado 'll' mas mais abaixo há dois casos de 'L'. Uniformizar!
-}
+export const FormatDate = (timestamp) => {
+  return new Date(timestamp).setHours(0, 0, 0, 0);
+};
 
-export const formatTime=(timestamp)=>{
-    const date=new Date(timestamp);
-    const timeString=date.toLocaleTimeString([],{
-        hour:'2-digit',
-        minute:'2-digit'
-    })
+export const formatDateForText = (date) => {
+  return moment(date).format("L"); // Ex: 14 de outubro de 2025
+};
 
-    console.log(timeString)
-    return timeString; // 9:00 AM 
-}
+export const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const timeString = date.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-export const getDatesRange=(startdate,endDate)=>{
-    const start=moment(new Date(startdate),'MM/DD/YYYY');
-    const end=moment(new Date(endDate),'MM/DD/YYYY');
-    const dates=[];
+  console.log(timeString);
+  return timeString; // Ex: 09:00
+};
 
-    while(start.isSameOrBefore(end))
-    {
-        dates.push(start.format('MM/DD/YYYY'));
-        start.add(1,'days')
-    }
+export const getDatesRange = (startDate, endDate) => {
+  const start = moment(new Date(startDate), "DD/MM/YYYY");
+  const end = moment(new Date(endDate), "DD/MM/YYYY");
+  const dates = [];
 
-    return dates;
+  while (start.isSameOrBefore(end)) {
+    dates.push(start.format("L")); // Ex: 14/10/2025
+    start.add(1, "days");
+  }
 
-}
+  return dates;
+};
 
-/**
- * 
- * @returns // pega a data atual e os próximos 7 dias
- */
-export const GetDateRangeToDisplay=()=>{
-    const dateList=[];
-    for(let i=0;i<=7;i++)
-    {
-        dateList.push({
-            date:moment().add(i,'days').format('DD'), // 27
-            day:moment().add(i,'days').format('dd'), // Tue
-            formattedDate:moment().add(i,'days').format('L')// 12/27/2024
-        })
-    }
+export const GetDateRangeToDisplay = () => {
+  const dateList = [];
+  for (let i = 0; i <= 7; i++) {
+    dateList.push({
+      date: moment().add(i, "days").format("DD"), // 27
+      day: moment().add(i, "days").format("dd"), // qua
+      formattedDate: moment().add(i, "days").format("L"), // 14/10/2025
+    });
+  }
 
-    return dateList;
-}
+  return dateList;
+};
 
-export const GetPrevDateRangeToDisplay=()=>{
-    const dates=[];
-    for(let i=0;i<=7;i++)
-    {
-        const date=moment().subtract(i,'days');
+export const GetPrevDateRangeToDisplay = () => {
+  const dates = [];
+  for (let i = 0; i <= 7; i++) {
+    const date = moment().subtract(i, "days");
 
-        dates.push({
-            date:date.format('DD'),
-            day:date.format('dd'),
-            formattedDate:date.format('L')
-        })
-    }
-    return dates;
-}
+    dates.push({
+      date: date.format("DD"),
+      day: date.format("dd"),
+      formattedDate: date.format("L"),
+    });
+  }
+  return dates;
+};

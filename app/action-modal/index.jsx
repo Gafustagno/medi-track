@@ -3,10 +3,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import MedicationCardItem from '../../components/MedicationCardItem';
 import Colors from '../../constant/Colors';
 import { db } from '../config/FirebaseConfig';
-
 
 export default function MedicationActionModal() {
     const medicine=useLocalSearchParams();
@@ -47,27 +45,26 @@ export default function MedicationActionModal() {
         <Text style={{fontSize:18}}>{medicine?.selectedDate}</Text>
         <Text style={{fontSize:38,fontWeight:'bold',color:Colors.PRIMARY}}>{medicine?.reminder}</Text>
         <Text style={{fontSize:18}}>É hora de tomar</Text>
-        
-        <MedicationCardItem medicine={medicine}/>
+            
         
         <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.closeBtn}
             onPress={()=>UpdateActionStatus('Não Tomou')}
             >
-                    <Ionicons name="close-outline" size={24} color="red" />
+                    <Ionicons name="close-outline" size={24} color="white" left={5} />
                     <Text style={{
                         fontSize:20,
-                        color:'red'
-                    }}>Não Tomou</Text>
+                        color:'red',
+                    }}></Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.successBtn}
              onPress={()=>UpdateActionStatus('Tomou')}
             >
-                    <Ionicons name="checkmark-outline" size={24} color="white" />
+                    <Ionicons name="checkmark-outline" size={24} color="white" left={5} />
                     <Text style={{
                         fontSize:20,
                         color:'white'
-                    }}>Tomou</Text>
+                    }}></Text>
             </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -104,7 +101,8 @@ const styles = StyleSheet.create({
         borderWidth:1,
         alignItems:'center',
         borderColor:'red',
-        borderRadius:10
+        borderRadius:10,
+        backgroundColor:Colors.RED,
     },
     successBtn:{
         padding:10,

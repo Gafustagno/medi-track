@@ -1,28 +1,28 @@
-export const TypeList=[
-    {
-        name:'Comprimido',
-        icon:'https://cdn-icons-png.flaticon.com/128/2002/2002580.png'
-    },
-    {
-        name:'Cápsula',
-        icon:'https://cdn-icons-png.flaticon.com/128/5419/5419454.png'
-    },
-    {
-        name:'Gota',
-        icon:'https://cdn-icons-png.flaticon.com/128/12285/12285293.png'
-    },
-    {
-        name:'Xarope',
-        icon:'https://cdn-icons-png.flaticon.com/128/11496/11496783.png'
-    },
-    {
-        name:'Injeção',
-        icon:'https://cdn-icons-png.flaticon.com/128/3217/3217557.png'
-    },
-    {
-        name:'Outro',
-        icon:'https://cdn-icons-png.flaticon.com/128/11496/11496770.png'
-    }
+export const TypeList = [
+  {
+    name: 'Comprimido',
+    icon: require('../assets/images/PillsPainkiller.png'),
+  },
+  {
+    name: 'Cápsula',
+    icon: require('../assets/images/PillsBetablocker.png'),
+  },
+  {
+    name: 'Gota',
+    icon: require('../assets/images/PillsSleeping.png'),
+  },
+  {
+    name: 'Xarope',
+    icon: require('../assets/images/Vitamins.png'),
+  },
+  {
+    name: 'Injeção',
+    icon: require('../assets/images/PillsAntidepressant.png'),
+  },
+  {
+    name: 'Outro',
+    icon: require('../assets/images/Antibiotics.png'),
+  },
 ]
 
 export const WhenToTake=[

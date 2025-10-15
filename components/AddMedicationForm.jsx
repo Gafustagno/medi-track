@@ -33,12 +33,8 @@ export default function AddMedicationForm() {
    const SaveMedication=async()=>{
        const docId=Date.now().toString();
        const user=await getLocalStorage('userDetail');
-
-       // validação deveria ser com &&. Está passando quando não preenche tudo.
-       // Precisa bloquear o envio tb se estiver em Quando Tomar, q é soh um placeholder.
-       // Ajustar!
        
-       if(!(formData?.name||formData?.type||formData?.dose||formData?.startDate||formData?.endDate||formData?.reminder))
+       if(!(formData?.name && formData?.type && formData?.dose && formData?.startDate && formData?.endDate && formData?.reminder))
        {
          
           Alert.alert('Entre todos os campos');
@@ -76,7 +72,6 @@ export default function AddMedicationForm() {
     <View style={{
       padding:25
     }}>
-      <Text style={styles.header}>Adicionar Novo Medicamento</Text>
 
       <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
@@ -206,7 +201,7 @@ export default function AddMedicationForm() {
 const styles= StyleSheet.create({
   header:{
     fontSize:25,
-    fontWeight:'bold'
+    fontWeight:'bold',
   },
   inputGroup:{
     display:'flex',

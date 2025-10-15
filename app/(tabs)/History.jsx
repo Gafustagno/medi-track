@@ -10,7 +10,7 @@ import { getLocalStorage } from '../../service/Storage';
 import { db } from '../config/FirebaseConfig';
 
 export default function History() {
-  const [selectedDate,setSelectedDate]=useState(moment().format('MM/DD/YYYY'));
+  const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));
   const [dateRange,setDateRange]=useState();
   const [loading,setLoading]=useState(false);
   const [medList,setMedList]=useState();

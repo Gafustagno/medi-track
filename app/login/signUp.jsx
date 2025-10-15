@@ -58,8 +58,8 @@ export default function SignUp() {
           <View style={{
             marginTop:25
           }}>
-            <Text>Nome completo</Text>
-            <TextInput placeholder='Nome completo'
+            <Text>Nome</Text>
+            <TextInput placeholder='Nome'
             onChangeText={(value)=>setUserName(value)}
             style={styles.textInput}/>
           </View>
@@ -94,7 +94,7 @@ export default function SignUp() {
           </TouchableOpacity>
     
           <TouchableOpacity style={styles.buttonCreate}
-          onPress={()=>router.push('login/signUp')}
+          onPress={()=>router.push('login/signIn')}
           >
             <Text style={{
                 fontSize:17,

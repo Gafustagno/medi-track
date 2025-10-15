@@ -75,7 +75,7 @@ export default function Profile() {
         alignItems: 'center',
         marginVertical: 25
       }}>
-        <Image source={require('./../../assets/images/smiley.png')} style={{
+        <Image source={require('./../../assets/images/Mood_Happy.png')} style={{
           width: 80,
           height: 80,
          

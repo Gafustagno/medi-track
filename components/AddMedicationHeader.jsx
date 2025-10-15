@@ -6,7 +6,7 @@ export default function AddMedicationHeader() {
     const router=useRouter();
   return (
     <View>
-        <Image source={require('./../assets/images/consult.png')}
+        <Image source={require('./../assets/images/MedicInv.jpg')}
             style={{
                 height:280,
                 width:'100%'

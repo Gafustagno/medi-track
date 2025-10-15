@@ -15,7 +15,7 @@ export default function MedicationList() {
 
         const [medList,setMedList]=useState();
         const [dateRange,setDateRange]=useState();
-        const [selectedDate,setSelectedDate]=useState(moment().format('MM/DD/YYYY'));
+        const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));
         const [loading,setLoading]=useState(false);
         const router=useRouter();
         useEffect(()=>{
@@ -59,7 +59,7 @@ export default function MedicationList() {
         <View style={{
             marginTop:25
         }}>
-            <Image source={require('./../assets/images/medication.jpeg')}
+            <Image source={require('./../assets/images/header.jpg')}
             style={{
                 width:'100%',
                 height:200,
