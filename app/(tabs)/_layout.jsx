@@ -33,16 +33,16 @@ export default function TabLayout() {
             <FontAwesome name="home" size={size} color={color} />
           ),
         }} />
-      <Tabs.Screen name='Histórico'
+      <Tabs.Screen name='History'
       options={{
-          tabBarLabel:'History',
+          tabBarLabel:'Histórico',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="history" size={size} color={color} />
           ),
-        }} />
-      <Tabs.Screen name='Perfil'
+        }} /> 
+      <Tabs.Screen name='Profile'
       options={{
-          tabBarLabel:'Profile',
+          tabBarLabel:'Perfil',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user" size={size} color={color} />
           ),

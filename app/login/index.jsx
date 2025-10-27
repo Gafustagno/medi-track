@@ -15,14 +15,14 @@ export default function LoginScreen() {
         }}
       >
         <Image
-          source={require('./../../assets/images/login.png')}
+          source={require('./../../assets/images/default.jpg')}
           style={styles.image}
         />
       </View>
 
       <View
         style={{
-          padding: 25,
+          padding: 70,
           backgroundColor: Colors.PRIMARY,
           height: '100%',
         }}
@@ -61,7 +61,7 @@ export default function LoginScreen() {
           <Text style={{
             color:'white',
             marginTop:4
-          }}>Nota: Ao clicar no botão Continuar, você concorda com nossos termos e condições</Text>
+          }}></Text>
       </View>
     </View>
   );
@@ -69,10 +69,11 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   image: {
-    width: 210,
-    height: 450,
-    borderRadius: 23,
-  },
+  width: '100%',
+  height: 300,
+  resizeMode: 'cover',
+  borderRadius: 0,
+},
   button:{
     padding:15,
     backgroundColor:'white',

@@ -43,9 +43,9 @@ export default function SignIn() {
   return (
     <View style={{
         padding:25
-    }}>      {/* melhor tirar isso */}
-      <Text style={styles.textHeader}>Boas-vindas</Text>
-      <Text style={styles.subText}>Que bom que voltou!</Text>      
+    }}>
+      <Text style={styles.textHeader}/>
+      <Text style={styles.subText}/>
 
       <View style={{
         marginTop:25

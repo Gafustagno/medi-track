@@ -68,7 +68,7 @@ export default function Profile() {
       <Text style={{
         fontFamily: 'outfit-medium',
         fontSize: 30
-      }}>Perfil</Text>
+      }}/>
 
       <View style={{
         display: 'flex',
