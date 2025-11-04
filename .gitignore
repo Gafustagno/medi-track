@@ -37,7 +37,7 @@ yarn-error.*
 app-example
 
 # API Firebase Firestore - nao pode puxar durante a build
-**/FirebaseConfig.jsx
+#**/FirebaseConfig.jsx
 
 .Lixo/
 .Lixo(2)/
