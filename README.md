@@ -58,6 +58,9 @@ Criar arquivo local.properties antes da build (explicação em local.properties.
 npm ci (instala as dependências de package-lock.json)
 npx expo start (com Android Studio para emular)
 
+## Caso a build já tenha sido feita:
+
+
 ## Build + Deploy + APK
 Criar arquivo local.properties antes da build (explicação em local.properties.exemplo)
 npm ci (instala as dependências de package-lock.json)
