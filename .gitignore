@@ -11,11 +11,11 @@ expo-env.d.ts
 .kotlin/
 *.orig.*
 *.jks
+*.keystore
 *.p8
 *.p12
 *.key
 *.mobileprovision
-*.keystore
 
 # Metro
 .metro-health-check*
@@ -39,9 +39,6 @@ app-example
 
 # IOS
 ios/
-
-# API Firebase Firestore - nao pode puxar durante a build
-#**/FirebaseConfig.jsx
 
 .Lixo/
 .Lixo(2)/

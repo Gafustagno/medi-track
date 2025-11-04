@@ -62,6 +62,7 @@ npx expo run:android (com Android Studio para emular)
 npx expo start (para emular no Android Studio se já tiver feito a build anterior do npx expo run:android )
 
 ## Build + Deploy + APK - Via EAS Build
+
 npm ci (instala as dependências de package-lock.json)
 npx expo prebuild --clean --no-install (apaga a pasta android mas não altera as dependências criadas)
 git add android / git commit (commit da pasta NOVA do android)
