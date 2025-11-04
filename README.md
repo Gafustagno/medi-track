@@ -2,6 +2,7 @@
 
 React Native app desenvolvido com [Expo](https://expo.dev).
 Autenticação e banco de dados via Firebase (Auth + Firestore).
+SDK53
 
 [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -50,19 +51,17 @@ app /> - diretório com todas as telas e a navegação.
 components /> - diretório com todos os componentes reutilizáveis da aplicação
 constant /> - diretório com valores estáticos (cores, tipos de medicamentos e textos)
 service /> - diretório com utilitário de conversão de data/hora, armazenamento do async storage e configurações do firebase
+android /> - diretório Android nativo para compilação do APK
 
 
-## Build + Deploy
+## Build + Deploy - Apenas para Emular no Android Studio
 
-Criar arquivo local.properties antes da build (explicação em local.properties.exemplo)
+Criar arquivo local.properties para apontar o endereço do SDK (explicação em local.properties.exemplo)
 npm ci (instala as dependências de package-lock.json)
-npx expo start (com Android Studio para emular)
+npx expo run:android (com Android Studio para emular)
+npx expo start (para emular no Android Studio se já tiver feito a build anterior do npx expo run:android )
 
-## Caso a build já tenha sido feita:
-
-
-## Build + Deploy + APK
-Criar arquivo local.properties antes da build (explicação em local.properties.exemplo)
+## Build + Deploy + APK - Via EAS Build
 npm ci (instala as dependências de package-lock.json)
 npx expo prebuild --clean --no-install (apaga a pasta android mas não altera as dependências criadas)
 git add android / git commit (commit da pasta NOVA do android)
