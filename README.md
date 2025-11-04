@@ -42,7 +42,7 @@ Isso cria um diretório chamado **app-example** e cria uma pasta nova chamada **
 
 ## Autenticação
 
-O arquivo FirebaseConfig com a API KEY precisa ser feito do zero porque está no arquivo .gitignore.
+O arquivo FirebaseConfig com a API KEY está no gitignore e precisa ser refeito. Alternativa: ambiente local .env
 
 ## Pastas e detalhamentos
 
@@ -52,9 +52,19 @@ constant /> - diretório com valores estáticos (cores, tipos de medicamentos e 
 service /> - diretório com utilitário de conversão de data/hora, armazenamento do async storage e configurações do firebase
 
 
-## Deploy
+## Build + Deploy
 
-Criado arquivo .apk
+Criar arquivo local.properties antes da build (explicação em local.properties.exemplo)
+npm ci (instala as dependências de package-lock.json)
+npx expo start (com Android Studio para emular)
+
+## Build + Deploy + APK
+Criar arquivo local.properties antes da build (explicação em local.properties.exemplo)
+npm ci (instala as dependências de package-lock.json)
+npx expo prebuild --clean --no-install (apaga a pasta android mas não altera as dependências criadas)
+git add android / git commit (commit da pasta NOVA do android)
+eas build -p android --profile preview --clear-cache (build com eas na nuvem)
+Criado arquivo .apk (conta expo)
 
 # Icones
 @expo/vector-icons@15.0.2
