@@ -2,7 +2,7 @@
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Colors from '../constant/Colors';
 import { TypeList } from '../constant/Options';
 
@@ -12,17 +12,37 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { db } from '../config/FirebaseConfig';
 
 
-export default function MedicationCardItem({ medicine, selectedDate = '' }) {
+export default function MedicationCardItem({ medicine, selectedDate = '' , onDelete}) {
   const [status, setStatus] = useState();
   /* excluir medicamento*/
   const router = useRouter();
+
   const handleDelete = async () => {
-    try {
-      await deleteDoc(doc(db, "medication", medicine.id));
-      alert("Medicamento excluído!");
-    } catch (e) {
-      console.log(e);
-    }
+
+    Alert.alert(
+    "Confirmar exclusão",
+    `Deseja realmente excluir o medicamento "${medicine.name}"?`,
+    [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: async () => {
+            try {
+              await deleteDoc(doc(db, "medication", medicine.id));
+              alert("Medicamento excluído!");
+
+              if (onDelete) onDelete(medicine.id); // remove da UI imediatamente
+            } catch (e) {
+              console.log(e);
+            }
+          },
+        },
+      ]
+    );
   };
 
   /* editar medicamento */
@@ -55,7 +75,20 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.9}
+      onPress={() =>
+        router.push({
+          pathname: "/action-modal",
+          params: {
+            ...medicine,
+            selectedDate,
+            docId: medicine.id,
+          },
+        })
+      }
+    >
       <View style={styles.subContainer}>
         <View style={styles.imageContainer}>
           <Image
@@ -87,6 +120,8 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
         </View>
       )}
 
+       {/* Botões editar e excluir */}
+
          <View style={{ flexDirection: "row", gap: 20, marginTop: 10 }}>
       <TouchableOpacity onPress={handleEdit}>
         <Ionicons name="create-outline" size={26} color="blue" />
@@ -95,12 +130,11 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
       <TouchableOpacity onPress={handleDelete}>
         <Ionicons name="trash-outline" size={26} color="red" />
       </TouchableOpacity>
-    </View>       
-       
-
     </View>
-  );
+    </TouchableOpacity>
+    );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -110,8 +144,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 15,
     flexDirection: 'row',
-    justifyContent: 'space-around', /* era space-between */
-    columnGap: 10, /*add par editar excluir*/
+    justifyContent: 'space-around',
     width: '100%',
     alignItems: 'center',
   },
@@ -137,11 +170,4 @@ const styles = StyleSheet.create({
     top: 5,
     padding: 7,
   },
-  /*editar e excluir */
-  actionButtons: {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 15,
-},
-
 });
