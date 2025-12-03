@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { db } from '../app/config/FirebaseConfig';
 import Colors from '../constant/Colors';
-import { FormatDate, formatDateForText, formatTime, getDatesRange } from '../service/ConvertDateTime';
+import { FormatDate, formatDateForText, formatTime, getDatesRange, timeStringToDate } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
 import { TypeList, WhenToTake } from './../constant/Options';
 
@@ -182,8 +182,7 @@ export default function AddMedicationForm() {
                     onHandleInputChange('reminder',formatTime(event.nativeEvent.timestamp))
                     setShowTimePicker(false)
                   }}
-                  value={new Date(formData?.reminder)??new Date()}
-          
+                  value={timeStringToDate(formData?.reminder)}          
                   />}
           
                   <TouchableOpacity style={styles.button}

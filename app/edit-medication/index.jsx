@@ -1,21 +1,35 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Colors from '../../constant/Colors';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Colors from "../../constant/Colors";
 import { TypeList, WhenToTake } from "../../constant/Options";
-import { FormatDate, formatDateForText, formatTime, getDatesRange } from '../../service/ConvertDateTime';
+import {
+  formatTime,
+  FormatDate,
+  formatDateForText,
+  getDatesRange,
+  timeStringToDate,
+} from "../../service/ConvertDateTime";
 import { db } from "../config/FirebaseConfig";
 
-   
 export default function EditMedicine() {
-  const { id } = useLocalSearchParams();  
+  const { id } = useLocalSearchParams();
+  const router = useRouter();
+
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [showStartDate,setShowStartDate]=useState(false);
-  const [showEndDate,setShowEndDate]=useState(false);
+  const [showStartDate, setShowStartDate] = useState(false);
+  const [showEndDate, setShowEndDate] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -27,10 +41,10 @@ export default function EditMedicine() {
     endDate: "",
   });
 
-  const router = useRouter();
-    useEffect(() => {
-      loadMedicine();
-    }, []);
+  // CARREGA DADOS DO FIRESTORE
+  useEffect(() => {
+    loadMedicine();
+  }, []);
 
   const loadMedicine = async () => {
     const ref = doc(db, "medication", id);
@@ -43,7 +57,7 @@ export default function EditMedicine() {
         dose: data.dose || "",
         type: {
           name: data.type?.name || "",
-          icon: data.type?.icon ?? 0
+          icon: data.type?.icon ?? 0,
         },
         when: data.when || "",
         reminder: data.reminder || "",
@@ -53,24 +67,25 @@ export default function EditMedicine() {
     }
   };
 
-  /*salva no firestore o medicamento atualizado*/
+  // SALVA EDIÇÕES NO FIRESTORE
   const saveEdit = async () => {
     const ref = doc(db, "medication", id);
     const snap = await getDoc(ref);
     const data = snap.data();
+
     const newDates = getDatesRange(form.startDate, form.endDate);
-    await updateDoc(doc(db, "medication", id),
-              {
-              ...form,
-              dates: newDates,
-              action: data.action ?? [] // preserva historico tomou ou nao tomou
-            });
+
+    await updateDoc(ref, {
+      ...form,
+      dates: newDates,
+      action: data.action ?? [], // preserva histórico
+    });
+
     alert("Medicamento atualizado!");
     router.replace("(tabs)");
-  }; 
-  
-  
-   return (
+  };
+
+  return (
     <>
       <Stack.Screen
         options={{
@@ -81,10 +96,14 @@ export default function EditMedicine() {
       />
 
       <View style={styles.container}>
-
         {/* Nome */}
         <View style={styles.inputGroup}>
-          <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
+          <Ionicons
+            style={styles.icon}
+            name="medkit-outline"
+            size={24}
+            color="black"
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Nome do Medicamento"
@@ -93,7 +112,6 @@ export default function EditMedicine() {
             autoComplete="off"
             autoCorrect={false}
             importantForAutofill="no"
-            keyboardType="default"
           />
         </View>
 
@@ -108,14 +126,20 @@ export default function EditMedicine() {
               style={[
                 styles.inputGroup,
                 { marginRight: 10 },
-                { backgroundColor: item.name === form.type.name ? Colors.PRIMARY : "white" },
+                {
+                  backgroundColor:
+                    item.name === form.type.name ? Colors.PRIMARY : "white",
+                },
               ]}
               onPress={() => setForm({ ...form, type: item })}
             >
               <Text
                 style={[
                   styles.typeText,
-                  { color: item.name === form.type.name ? "white" : "black" },
+                  {
+                    color:
+                      item.name === form.type.name ? "white" : "black",
+                  },
                 ]}
               >
                 {item.name}
@@ -126,7 +150,12 @@ export default function EditMedicine() {
 
         {/* Dose */}
         <View style={styles.inputGroup}>
-          <Ionicons style={styles.icon} name="eyedrop-outline" size={24} color="black" />
+          <Ionicons
+            style={styles.icon}
+            name="eyedrop-outline"
+            size={24}
+            color="black"
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Dose - Ex: 2,5ml"
@@ -135,13 +164,17 @@ export default function EditMedicine() {
             autoComplete="off"
             autoCorrect={false}
             importantForAutofill="no"
-            keyboardType="default"
           />
         </View>
 
         {/* Quando tomar */}
         <View style={styles.inputGroup}>
-          <Ionicons style={styles.icon} name="time-outline" size={24} color="black" />
+          <Ionicons
+            style={styles.icon}
+            name="time-outline"
+            size={24}
+            color="black"
+          />
           <Picker
             selectedValue={form.when}
             onValueChange={(v) => setForm({ ...form, when: v })}
@@ -153,110 +186,127 @@ export default function EditMedicine() {
           </Picker>
         </View>
 
-        {/* Data Inicial e Final */}
-    <Text style={styles.label}>Período de Uso</Text>
+        {/* Período de Uso */}
+        <Text style={styles.label}>Período de Uso</Text>
 
-    <View style={styles.inputGroup}>
+        <View style={styles.dateInputGroup}>
+          {/* DATA INICIAL */}
+          <TouchableOpacity
+            style={styles.dateBox}
+            onPress={() => setShowStartDate(true)}
+          >
+            <Ionicons
+              style={styles.icon}
+              name="calendar-outline"
+              size={24}
+              color="black"
+            />
+            <Text style={styles.text}>
+              {form.startDate
+                ? formatDateForText(form.startDate)
+                : "Data Inicial"}
+            </Text>
+          </TouchableOpacity>
 
-    {/* DATA INICIAL */}
-    <TouchableOpacity
-      style={[styles.inputGroup, { flex: 1 }]}
-      onPress={() => setShowStartDate(true)}
-    >
-      <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
-      <Text style={styles.text}>
-        {form.startDate
-          ? formatDateForText(form.startDate)
-          : "Data Inicial"}
-      </Text>
-    </TouchableOpacity>
-
-    {showStartDate && (
-      <RNDateTimePicker
-        minimumDate={new Date()}
-        onChange={(event) => {
-          if (event.type === "dismissed") {
-            setShowStartDate(false);
-            return;
-          }
-          setForm({
-            ...form,
-            startDate: FormatDate(event.nativeEvent.timestamp),
-          });
-          setShowStartDate(false);
-        }}
-        value={form.startDate ? new Date(form.startDate) : new Date()}
-      />
-    )}
-
-    {/* DATA FINAL */}
-        <TouchableOpacity
-          style={[styles.inputGroup, { flex: 1 }]}
-          onPress={() => setShowEndDate(true)}
-        >
-          <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
-          <Text style={styles.text}>
-            {form.endDate
-              ? formatDateForText(form.endDate)
-              : "Data Final"}
-          </Text>
-        </TouchableOpacity>
-
-        {showEndDate && (
-          <RNDateTimePicker
-            minimumDate={new Date()}
-            onChange={(event) => {
-              if (event.type === "dismissed") {
-                setShowEndDate(false);
-                return;
-              }
-              setForm({
-                ...form,
-                endDate: FormatDate(event.nativeEvent.timestamp),
-              });
-              setShowEndDate(false);
-            }}
-            value={form.endDate ? new Date(form.endDate) : new Date()}
-          />
-        )}
-
-      </View>
-
-          {/* Horário do lembrete */}
-          <View style={styles.dateInputGroup}>
-            <Ionicons style={styles.icon} name="timer-outline" size={24} color="black" />
-            <TouchableOpacity style={{ flex: 1 }} onPress={() => setShowTimePicker(true)}>
-              <Text style={styles.text}>
-                {form.reminder ? form.reminder : "Selecionar Horário"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {showTimePicker && (
+          {showStartDate && (
             <RNDateTimePicker
-              mode="time"
+              minimumDate={new Date()}
+              value={
+                form.startDate ? new Date(form.startDate) : new Date()
+              }
               onChange={(event) => {
-                if (event.type === "dismissed") {
-                  setShowTimePicker(false);
-                  return;
-                }
-                const newTime = formatTime(event.nativeEvent.timestamp);
-                setForm({ ...form, reminder: newTime });
-                setShowTimePicker(false);
+                if (event.type === "dismissed")
+                  return setShowStartDate(false);
+                setForm({
+                  ...form,
+                  startDate: FormatDate(event.nativeEvent.timestamp),
+                });
+                setShowStartDate(false);
               }}
-              value={new Date()}
             />
           )}
 
-          {/* Botão */}
-          <TouchableOpacity style={styles.button} onPress={saveEdit}>
-            <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>
+          {/* DATA FINAL */}
+          <TouchableOpacity
+            style={styles.dateBox}
+            onPress={() => setShowEndDate(true)}
+          >
+            <Ionicons
+              style={styles.icon}
+              name="calendar-outline"
+              size={24}
+              color="black"
+            />
+            <Text style={styles.text}>
+              {form.endDate
+                ? formatDateForText(form.endDate)
+                : "Data Final"}
+            </Text>
           </TouchableOpacity>
 
+          {showEndDate && (
+            <RNDateTimePicker
+              minimumDate={new Date()}
+              value={form.endDate ? new Date(form.endDate) : new Date()}
+              onChange={(event) => {
+                if (event.type === "dismissed")
+                  return setShowEndDate(false);
+                setForm({
+                  ...form,
+                  endDate: FormatDate(event.nativeEvent.timestamp),
+                });
+                setShowEndDate(false);
+              }}
+            />
+          )}
         </View>
-      </>
-    );
-  }
+
+        {/* Horário do Lembrete */}
+        <View style={styles.inputGroup}>
+          <Ionicons
+            style={styles.icon}
+            name="timer-outline"
+            size={24}
+            color="black"
+          />
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => setShowTimePicker(true)}
+          >
+            <Text style={styles.text}>
+              {form.reminder ? form.reminder : "Selecionar Horário"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {showTimePicker && (
+          <RNDateTimePicker
+            mode="time"
+            value={
+              form.reminder
+                ? timeStringToDate(form.reminder)
+                : new Date()
+            }
+            onChange={(event) => {
+              if (event.type === "dismissed")
+                return setShowTimePicker(false);
+              setForm({
+                ...form,
+                reminder: formatTime(event.nativeEvent.timestamp),
+              });
+              setShowTimePicker(false);
+            }}
+          />
+        )}
+
+        {/* Botão */}
+        <TouchableOpacity style={styles.button} onPress={saveEdit}>
+          <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+}
 
 const styles = StyleSheet.create({
   container: { padding: 25 },
@@ -270,6 +320,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.LIGHT_GRAY_BORDER,
     marginTop: 10,
+    backgroundColor: "white",
+  },
+
+  dateBox: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.LIGHT_GRAY_BORDER,
     backgroundColor: "white",
   },
 
@@ -292,9 +353,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 16,
-    padding: 10,
-    flex: 1,
-    marginLeft: 10,
+    paddingLeft: 10,
   },
 
   button: {
@@ -310,8 +369,10 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
+
   dateInputGroup: {
-  flexDirection: "row",
-  gap: 10,
-},
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 10,
+  },
 });

@@ -61,3 +61,14 @@ export const GetPrevDateRangeToDisplay = () => {
   }
   return dates;
 };
+
+/* para converter de volta o horario de acordo com o q está salvo no firestore (em timestamp) qd o usuario vai editar o medicamento */
+export const timeStringToDate = (timeString) => {
+  if (!timeString) return new Date();
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(0);
+  return date;
+};
