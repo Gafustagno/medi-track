@@ -1,3 +1,5 @@
+/*MedicationList.jsx*/
+
 import { useRouter } from 'expo-router';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import moment from 'moment';
@@ -9,6 +11,8 @@ import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
 import EmptyState from './EmptyState';
 import MedicationCardItem from './MedicationCardItem';
+import { useIsFocused } from "@react-navigation/native";
+
 
 
 export default function MedicationList() {
@@ -17,10 +21,19 @@ export default function MedicationList() {
         const [dateRange,setDateRange]=useState();
         const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));
         const [loading,setLoading]=useState(false);
+        
+        /* para editar e excluir is Focused*/
+        const isFocused = useIsFocused();
+
+        useEffect(() => {
+        if (isFocused) {
+            GetMedicationList(selectedDate);
+        }
+        }, [isFocused]);
+
         const router=useRouter();
         useEffect(()=>{
-            GetDateRangeList();
-            GetMedicationList(selectedDate);
+            GetDateRangeList();   /*retirei o getmedicationlist daqui pra nao ficar duplicado - estava dando erro pq repetia id */          
         },[])
     
         const GetDateRangeList=()=>{
@@ -39,11 +52,25 @@ export default function MedicationList() {
     
     
             const querySnapshot=await getDocs(q);
-          
+
+            const list = querySnapshot.docs.map(docSnap => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+            }));
+
+            setMedList(list);
+            } catch (e) {
+                console.log(e);
+            }
+
+            setLoading(false);
+            };
+                      
+            /*
             console.log("--",selectedDate)
             querySnapshot.forEach((doc)=>{
                 console.log("docId:-"+doc.id+'==>',doc.data())
-                setMedList(prev=>[...prev,doc.data()])
+                setMedList(prev=>[...prev,{id: doc.id, ...doc.data()}]) /* adiciona doc id pra pq pega pelo id pra editar e excluir
             })
             setLoading(false);
     
@@ -54,7 +81,7 @@ export default function MedicationList() {
     
             }
         }
-    
+    */
       return (
         <View style={{
             marginTop:25
@@ -87,16 +114,10 @@ export default function MedicationList() {
                 data={medList}
                 onRefresh={()=>GetMedicationList(selectedDate)}
                 refreshing={loading}
-                renderItem={({item,index})=>(
-                    <TouchableOpacity onPress={()=>router.push({
-                        pathname:'/action-modal',
-                        params:{
-                            ...item,
-                            selectedDate:selectedDate
-                        }
-                    })}>
-                   <MedicationCardItem medicine={item} selectedDate={selectedDate} /> 
-                   </TouchableOpacity>
+                renderItem={({item,index})=>(  /*nao pode ser touchable o card inteiro senao ao clicar em editar ou excluir dispara o action-modal inteiro*/
+                    <MedicationCardItem medicine={item}
+                    selectedDate={selectedDate}
+                    onPress={() => router.push({ pathname: '/action-modal', params: item })} />                  
                 )}
             />:<EmptyState/>}
     

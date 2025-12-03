@@ -16,7 +16,7 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
   const router = useRouter();
   const handleDelete = async () => {
     try {
-      await deleteDoc(doc(db, "medications", medicine.id));
+      await deleteDoc(doc(db, "medication", medicine.id));
       alert("Medicamento excluído!");
     } catch (e) {
       console.log(e);
@@ -26,7 +26,7 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
   /* editar medicamento */
   const handleEdit = () => {
     router.push({
-      pathname: "/edit-medicine",
+      pathname: "/edit-medication",
       params: { id: medicine.id }
     });
   };
