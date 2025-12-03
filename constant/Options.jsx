@@ -1,3 +1,4 @@
+//constant/Options.jsx
 export const TypeList = [
   {
     name: 'Comprimido',

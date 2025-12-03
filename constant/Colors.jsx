@@ -1,3 +1,5 @@
+//constant\Colors.jsx
+
 export default{
     PRIMARY: '#3A76A6',
     GRAY: '#707070',

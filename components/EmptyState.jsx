@@ -1,3 +1,5 @@
+//components\EmptyState.jsx
+
 import { useRouter } from 'expo-router';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constant/Colors';

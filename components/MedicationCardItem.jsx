@@ -1,3 +1,5 @@
+//components\MedicationCardItem.jsx
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';

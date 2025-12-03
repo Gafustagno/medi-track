@@ -1,4 +1,4 @@
-/*MedicationList.jsx*/
+//components\MedicationList.jsx
 
 import { useRouter } from 'expo-router';
 import { collection, getDocs, query, where } from 'firebase/firestore';

@@ -1,3 +1,5 @@
+// app\(tabs)\Profile.jsx
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { getAuth, signOut } from 'firebase/auth';

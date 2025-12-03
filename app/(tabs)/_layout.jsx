@@ -1,3 +1,5 @@
+// app\(tabs)\_layout.jsx
+
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs, useRouter } from 'expo-router';
 import { useEffect } from 'react';
