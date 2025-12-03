@@ -1,11 +1,37 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Colors from '../constant/Colors';
 import { TypeList } from '../constant/Options';
 
+/* excluir medicamento*/
+import { deleteDoc, doc } from "firebase/firestore";
+import { useRouter } from "expo-router";
+import { db } from "../app/config/FirebaseConfig";
+
+
 export default function MedicationCardItem({ medicine, selectedDate = '' }) {
   const [status, setStatus] = useState();
+  /* excluir medicamento*/
+  const router = useRouter();
+  const handleDelete = async () => {
+    try {
+      await deleteDoc(doc(db, "medications", medicine.id));
+      alert("Medicamento excluído!");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  /* editar medicamento */
+  const handleEdit = () => {
+    router.push({
+      pathname: "/edit-medicine",
+      params: { id: medicine.id }
+    });
+  };
+
+  /* -> até aqui */
 
   useEffect(() => {
     CheckStatus();
@@ -58,6 +84,18 @@ export default function MedicationCardItem({ medicine, selectedDate = '' }) {
           ) : null}
         </View>
       )}
+
+         <View style={{ flexDirection: "row", gap: 20, marginTop: 10 }}>
+      <TouchableOpacity onPress={handleEdit}>
+        <Ionicons name="create-outline" size={26} color="blue" />
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleDelete}>
+        <Ionicons name="trash-outline" size={26} color="red" />
+      </TouchableOpacity>
+    </View>       
+       
+
     </View>
   );
 }
@@ -70,7 +108,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around', /* era space-between */
+    columnGap: 10, /*add par editar excluir*/
     width: '100%',
     alignItems: 'center',
   },
@@ -96,4 +135,11 @@ const styles = StyleSheet.create({
     top: 5,
     padding: 7,
   },
+  /*editar e excluir */
+  actionButtons: {
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 15,
+},
+
 });
