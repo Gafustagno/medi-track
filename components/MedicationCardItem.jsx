@@ -2,14 +2,14 @@
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constant/Colors';
 import { TypeList } from '../constant/Options';
 
 /* excluir medicamento*/
-import { deleteDoc, doc } from "firebase/firestore";
 import { useRouter } from "expo-router";
-import { db } from "../app/config/FirebaseConfig";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from '../config/FirebaseConfig';
 
 
 export default function MedicationCardItem({ medicine, selectedDate = '' }) {

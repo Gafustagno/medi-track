@@ -1,3 +1,5 @@
+//app\edit-medication\index.jsx
+
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -21,7 +23,7 @@ import {
   getDatesRange,
   timeStringToDate,
 } from "../../service/ConvertDateTime";
-import { db } from "../config/FirebaseConfig";
+import { db } from "../../config/FirebaseConfig";
 
 export default function EditMedicine() {
   const { id } = useLocalSearchParams();

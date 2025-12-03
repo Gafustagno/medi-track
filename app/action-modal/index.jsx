@@ -1,10 +1,12 @@
+//app\action-modal\index.jsx
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
-import { db } from '../config/FirebaseConfig';
+import { db } from '../../config/FirebaseConfig';
 
 export default function MedicationActionModal() {
     const medicine=useLocalSearchParams();

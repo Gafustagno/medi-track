@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
 import { setLocalStorage } from '../../service/Storage';
-import { auth } from './../config/FirebaseConfig';
+import { auth } from '../../config/FirebaseConfig';
 
 export default function SignUp() {
 
@@ -61,7 +61,9 @@ export default function SignUp() {
             <Text>Nome</Text>
             <TextInput placeholder='Nome'
             onChangeText={(value)=>setUserName(value)}
-            style={styles.textInput}/>
+            style={styles.textInput}
+            autoComplete="off"
+            />
           </View>
     
           <View style={{
@@ -70,6 +72,7 @@ export default function SignUp() {
             <Text>Email</Text>
             <TextInput placeholder='Email' style={styles.textInput}
               onChangeText={(value)=>setEmail(value)}
+              autoComplete="off"
             />
           </View>
     
@@ -80,6 +83,7 @@ export default function SignUp() {
             <TextInput placeholder='Senha' style={styles.textInput}
             onChangeText={(value)=>setPassword(value)}
             secureTextEntry={true}
+            autoComplete="off"
             /> 
           </View>
     

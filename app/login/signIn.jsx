@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
 import { setLocalStorage } from '../../service/Storage';
-import { auth } from './../config/FirebaseConfig';
+import { auth } from '../../config/FirebaseConfig';
 
 export default function SignIn() {
 
@@ -52,7 +52,8 @@ export default function SignIn() {
       }}>
         <Text>Email</Text>
         <TextInput placeholder='Email' style={styles.textInput}
-        onChangeText={(value)=>setEmail(value)}
+        onChangeText={(value)=>setEmail(value)} autoComplete="off"
+        
         />
       </View>
 
@@ -62,7 +63,7 @@ export default function SignIn() {
         <Text>Senha</Text>
         <TextInput placeholder='Senha' style={styles.textInput}
         secureTextEntry={true}
-        onChangeText={(value)=>setPassword(value)}
+        onChangeText={(value)=>setPassword(value)} autoComplete="off"
         />
       </View>
 

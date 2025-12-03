@@ -9,7 +9,7 @@ import MedicationCardItem from '../../components/MedicationCardItem';
 import Colors from '../../constant/Colors';
 import { GetPrevDateRangeToDisplay } from '../../service/ConvertDateTime';
 import { getLocalStorage } from '../../service/Storage';
-import { db } from '../config/FirebaseConfig';
+import { db } from '../../config/FirebaseConfig';
 
   export default function History() {
     const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));

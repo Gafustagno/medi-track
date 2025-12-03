@@ -6,7 +6,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { getLocalStorage, RemoveLocalStorage } from '../../service/Storage';
-import app from '../config/FirebaseConfig';
+import app from '../../config/FirebaseConfig';
 import Colors from './../../constant/Colors';
 export default function Profile() {
 

@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { db } from '../app/config/FirebaseConfig';
+import { db } from '../config/FirebaseConfig';
 import Colors from '../constant/Colors';
 import { FormatDate, formatDateForText, formatTime, getDatesRange, timeStringToDate } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
@@ -79,7 +79,8 @@ export default function AddMedicationForm() {
           <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
           <TextInput style={styles.textInput} placeholder='Nome do Medicamento'
             onChangeText={(value)=> onHandleInputChange('name',value)}
-          />
+            autoComplete="off"            
+           />
       </View>
 
       {/* Type List */}
@@ -111,6 +112,7 @@ export default function AddMedicationForm() {
           <Ionicons style={styles.icon} name="eyedrop-outline" size={24} color="black" />
           <TextInput style={styles.textInput} placeholder='Dose - Ex: 2,5ml'
             onChangeText={(value)=> onHandleInputChange('dose',value)}
+            autoComplete="off"            
           />
       </View>
 

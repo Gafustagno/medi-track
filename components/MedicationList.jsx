@@ -5,7 +5,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { db } from '../app/config/FirebaseConfig';
+import { db } from '../config/FirebaseConfig';
 import Colors from '../constant/Colors';
 import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';

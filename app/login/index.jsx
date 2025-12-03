@@ -1,3 +1,5 @@
+//app\login\index.jsx
+
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
