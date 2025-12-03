@@ -11,7 +11,7 @@ import { db } from '../config/FirebaseConfig';
 import Colors from '../constant/Colors';
 import { FormatDate, formatDateForText, formatTime, getDatesRange, timeStringToDate } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
-import { TypeList, WhenToTake } from './../constant/Options';
+import { TypeList, WhenToTake } from '../constant/Options';
 
 
 
