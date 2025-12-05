@@ -1,4 +1,3 @@
-// components/AddMedicationForm.jsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
@@ -154,21 +153,26 @@ export default function AddMedicationForm() {
             value={ formData?.startDate ? new Date(formData.startDate) : new Date() }
           />}
 
-        <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
-          onPress={()=>setShowEndDate(true)}
-        >
-          <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
-          <Text style={styles.text}>{formatDateForText( formData?.endDate)??'End Date'}</Text>
-        </TouchableOpacity>
-        {showEndDate && <RNDateTimePicker
-            minimumDate={new Date()}
-            onChange={(event)=>{
-              if(event.type === 'dismissed') return setShowEndDate(false);
-              onHandleInputChange('endDate', FormatDate(event.nativeEvent.timestamp));
-              setShowEndDate(false)
-            }}
-            value={ formData?.endDate ? new Date(formData.endDate) : new Date() }
-          />}
+        {/* só mostra Data Final quando não for continuous */}
+        {!formData?.continuous && (
+          <>
+            <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
+              onPress={()=>setShowEndDate(true)}
+            >
+              <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
+              <Text style={styles.text}>{formatDateForText( formData?.endDate)??'End Date'}</Text>
+            </TouchableOpacity>
+            {showEndDate && <RNDateTimePicker
+                minimumDate={new Date()}
+                onChange={(event)=>{
+                  if(event.type === 'dismissed') return setShowEndDate(false);
+                  onHandleInputChange('endDate', FormatDate(event.nativeEvent.timestamp));
+                  setShowEndDate(false)
+                }}
+                value={ formData?.endDate ? new Date(formData.endDate) : new Date() }
+              />}
+          </>
+        )}
       </View>
 
       {/* Continuous switch */}
@@ -274,4 +278,4 @@ const styles= StyleSheet.create({
     color:'white',
     textAlign:'center'
   }
-}) 
+})

@@ -1,59 +1,78 @@
-// app\(tabs)\History.jsx
-
 import { router } from 'expo-router';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MedicationCardItem from '../../components/MedicationCardItem';
+import { db } from '../../config/FirebaseConfig';
 import Colors from '../../constant/Colors';
 import { GetPrevDateRangeToDisplay } from '../../service/ConvertDateTime';
 import { getLocalStorage } from '../../service/Storage';
-import { db } from '../../config/FirebaseConfig';
 
-  export default function History() {
-    const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));
-    const [dateRange,setDateRange]=useState();
-    const [loading,setLoading]=useState(false);
-    const [medList,setMedList]=useState();
-    useEffect(()=>{
-      GetDateList();
-      GetMedicationList(selectedDate);
-    },[])
+export default function History() {
+  const [selectedDate,setSelectedDate]=useState(moment().format('DD/MM/YYYY'));
+  const [dateRange,setDateRange]=useState();
+  const [loading,setLoading]=useState(false);
+  const [medList,setMedList]=useState([]);
 
-    const GetDateList=()=>{
-      const dates=GetPrevDateRangeToDisplay();
-      setDateRange(dates);
-    }
+  useEffect(()=>{
+    GetDateList();
+    GetMedicationList(selectedDate);
+  },[])
 
-    const GetMedicationList=async(selectedDate)=>{
-      setLoading(true);
-      const user=await getLocalStorage('userDetail');
-      setMedList([]);
-      try{
-      const q=query(collection(db,'medication'),
-      where('userEmail','==',user?.email),
-      where('dates','array-contains',selectedDate));
-
-
-      const querySnapshot=await getDocs(q);
-    
-      console.log("--",selectedDate)
-      querySnapshot.forEach((doc)=>{
-          console.log("docId:-"+doc.id+'==>',doc.data())
-          setMedList(prev=>[...prev,doc.data()])
-      })
-      setLoading(false);
-
-      }catch(e)
-      {
-          console.log(e)
-      setLoading(false);
-
-      }
+  const GetDateList=()=>{
+    const dates=GetPrevDateRangeToDisplay();
+    setDateRange(dates);
   }
-    return (
-      <FlatList 
+
+  const GetMedicationList = async (selectedDate) => {
+    setLoading(true);
+    const user = await getLocalStorage('userDetail');
+    setMedList([]);
+    try {
+      // busca todos os medicamentos do usuário
+      const q = query(collection(db, 'medication'), where('userEmail', '==', user?.email));
+      const querySnapshot = await getDocs(q);
+
+      const list = querySnapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      }));
+
+      // filtrar localmente
+      const filtered = list.filter(med => {
+        if (Array.isArray(med.dates) && med.dates.includes(selectedDate)) return true;
+
+        const sel = moment(selectedDate, 'L'); // 'L' -> 'DD/MM/YYYY'
+        if (!med.startDate) return false;
+
+        const start = moment(new Date(med.startDate));
+        if (!start.isValid()) return false;
+
+        if (med.continuous) {
+          // se é contínuo, aparece para qualquer dia >= start
+          return sel.isSameOrAfter(start, 'day');
+        }
+
+        if (med.endDate) {
+          const end = moment(new Date(med.endDate));
+          if (!end.isValid()) return false;
+          return sel.isBetween(start.clone().subtract(1, 'day'), end.clone().add(1, 'day'), 'day');
+        }
+
+        return false;
+      });
+
+      setMedList(filtered);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <FlatList 
       data={[]}
       style={{
         height:'100%',
@@ -93,7 +112,9 @@ import { db } from '../../config/FirebaseConfig';
                       pathname:'/action-modal',
                       params:{
                           ...item,
-                          selectedDate:selectedDate
+                          docId: item.id,
+                          selectedDate:selectedDate,
+                          reminders: JSON.stringify(item.reminders || (item.reminder ? [item.reminder] : []))
                       }
                   })}>
                 <MedicationCardItem medicine={item} selectedDate={selectedDate} /> 
@@ -110,41 +131,41 @@ import { db } from '../../config/FirebaseConfig';
           }
 
       </View>}
-      />
-    )
-  }
+    />
+  )
+}
 
-  const styles = StyleSheet.create({
-    mainContainer:{
-      padding:20,
-      backgroundColor:'white',
-      
-    },
+const styles = StyleSheet.create({
+  mainContainer:{
+    padding:20,
+    backgroundColor:'white',
+    
+  },
   imageBanner: {
-  width: '100%',
-  height: 350, // aumentei para exibir a imagem com proporção natural
-  resizeMode: 'contain', // preserva o formato original
-  borderRadius: 0, // remove arredondamento para parecer tela
-  backgroundColor: 'black', // opcional, combina com o tema da imagem
-},
-    header:{
-      fontSize:25,
-      fontWeight:'bold',
-      marginTop:20
-    },
-    dateGroup:{
-      padding:15,
-      backgroundColor:Colors.LIGHT_GRAY_BORDER,
-      display:'flex',
-      alignItems:'center',
-      marginRight:10,
-      borderRadius:10
+    width: '100%',
+    height: 350,
+    resizeMode: 'contain',
+    borderRadius: 0,
+    backgroundColor: 'black',
+  },
+  header:{
+    fontSize:25,
+    fontWeight:'bold',
+    marginTop:20
+  },
+  dateGroup:{
+    padding:15,
+    backgroundColor:Colors.LIGHT_GRAY_BORDER,
+    display:'flex',
+    alignItems:'center',
+    marginRight:10,
+    borderRadius:10
   },
   day:{
-      fontSize:20
+    fontSize:20
   },
   date:{
-      fontSize:26,
-      fontWeight:'bold'
+    fontSize:26,
+    fontWeight:'bold'
   }
-  })
+})

@@ -1,4 +1,3 @@
-// app/edit-medication/index.jsx
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -247,38 +246,42 @@ export default function EditMedicine() {
             />
           )}
 
-          {/* DATA FINAL */}
-          <TouchableOpacity
-            style={styles.dateBox}
-            onPress={() => setShowEndDate(true)}
-          >
-            <Ionicons
-              style={styles.icon}
-              name="calendar-outline"
-              size={24}
-              color="black"
-            />
-            <Text style={styles.text}>
-              {form.endDate
-                ? formatDateForText(form.endDate)
-                : "Data Final"}
-            </Text>
-          </TouchableOpacity>
+          {/* DATA FINAL - só mostra quando não for continuous */}
+          {!form.continuous && (
+            <>
+              <TouchableOpacity
+                style={styles.dateBox}
+                onPress={() => setShowEndDate(true)}
+              >
+                <Ionicons
+                  style={styles.icon}
+                  name="calendar-outline"
+                  size={24}
+                  color="black"
+                />
+                <Text style={styles.text}>
+                  {form.endDate
+                    ? formatDateForText(form.endDate)
+                    : "Data Final"}
+                </Text>
+              </TouchableOpacity>
 
-          {showEndDate && (
-            <RNDateTimePicker
-              minimumDate={new Date()}
-              value={form.endDate ? new Date(form.endDate) : new Date()}
-              onChange={(event) => {
-                if (event.type === "dismissed")
-                  return setShowEndDate(false);
-                setForm({
-                  ...form,
-                  endDate: FormatDate(event.nativeEvent.timestamp),
-                });
-                setShowEndDate(false);
-              }}
-            />
+              {showEndDate && (
+                <RNDateTimePicker
+                  minimumDate={new Date()}
+                  value={form.endDate ? new Date(form.endDate) : new Date()}
+                  onChange={(event) => {
+                    if (event.type === "dismissed")
+                      return setShowEndDate(false);
+                    setForm({
+                      ...form,
+                      endDate: FormatDate(event.nativeEvent.timestamp),
+                    });
+                    setShowEndDate(false);
+                  }}
+                />
+              )}
+            </>
           )}
         </View>
 
@@ -411,4 +414,4 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 10,
   },
-}); 
+});
