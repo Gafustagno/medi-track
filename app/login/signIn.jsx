@@ -1,10 +1,11 @@
+//app/login/signIn.jsx
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth } from '../../config/FirebaseConfig';
 import Colors from '../../constant/Colors';
 import { setLocalStorage } from '../../service/Storage';
-import { auth } from '../../config/FirebaseConfig';
 
 export default function SignIn() {
 
@@ -51,7 +52,7 @@ export default function SignIn() {
         marginTop:25
       }}>
         <Text>Email</Text>
-        <TextInput placeholder='Email' style={styles.textInput}
+        <TextInput placeholder='Email' placeholderTextColor="#777" style={styles.textInput}
         onChangeText={(value)=>setEmail(value)} autoComplete="off"
         
         />
@@ -61,7 +62,7 @@ export default function SignIn() {
         marginTop:25
       }}>
         <Text>Senha</Text>
-        <TextInput placeholder='Senha' style={styles.textInput}
+        <TextInput placeholder='Senha' placeholderTextColor="#777" style={styles.textInput}
         secureTextEntry={true}
         onChangeText={(value)=>setPassword(value)} autoComplete="off"
         />

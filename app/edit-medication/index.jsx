@@ -1,3 +1,4 @@
+//app/edit-medication/index.jsx
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -127,6 +128,7 @@ export default function EditMedicine() {
           <TextInput
             style={styles.textInput}
             placeholder="Nome do Medicamento"
+            placeholderTextColor="#777"
             value={form.name}
             onChangeText={(v) => setForm({ ...form, name: v })}
             autoComplete="off"

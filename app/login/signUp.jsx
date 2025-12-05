@@ -1,10 +1,11 @@
+//app/login/signUp.jsx
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { auth } from '../../config/FirebaseConfig';
 import Colors from '../../constant/Colors';
 import { setLocalStorage } from '../../service/Storage';
-import { auth } from '../../config/FirebaseConfig';
 
 export default function SignUp() {
 
@@ -60,6 +61,7 @@ export default function SignUp() {
           }}>
             <Text>Nome</Text>
             <TextInput placeholder='Nome'
+            placeholderTextColor="#777"
             onChangeText={(value)=>setUserName(value)}
             style={styles.textInput}
             autoComplete="off"
@@ -70,7 +72,7 @@ export default function SignUp() {
             marginTop:25
           }}>
             <Text>Email</Text>
-            <TextInput placeholder='Email' style={styles.textInput}
+            <TextInput placeholder='Email' placeholderTextColor="#777" style={styles.textInput}
               onChangeText={(value)=>setEmail(value)}
               autoComplete="off"
             />
@@ -80,7 +82,7 @@ export default function SignUp() {
             marginTop:25
           }}>
             <Text>Senha</Text>
-            <TextInput placeholder='Senha' style={styles.textInput}
+            <TextInput placeholder='Senha' placeholderTextColor="#777" style={styles.textInput}
             onChangeText={(value)=>setPassword(value)}
             secureTextEntry={true}
             autoComplete="off"

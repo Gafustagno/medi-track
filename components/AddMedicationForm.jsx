@@ -87,7 +87,7 @@ export default function AddMedicationForm() {
 
       <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
-          <TextInput style={styles.textInput} placeholder='Nome do Medicamento'
+          <TextInput style={styles.textInput} placeholder='Nome do Medicamento' placeholderTextColor="#777"
             onChangeText={(value)=> onHandleInputChange('name',value)}
             autoComplete="off"            
            />
@@ -115,7 +115,7 @@ export default function AddMedicationForm() {
       {/* Dose */}
       <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="eyedrop-outline" size={24} color="black" />
-          <TextInput style={styles.textInput} placeholder='Dose - Ex: 2,5ml'
+          <TextInput style={styles.textInput} placeholder='Dose - Ex: 2,5ml' placeholderTextColor="#777"
             onChangeText={(value)=> onHandleInputChange('dose',value)}
             autoComplete="off"            
           />

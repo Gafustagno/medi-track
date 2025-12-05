@@ -1,7 +1,7 @@
 // app/action-modal/index.jsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db } from '../../config/FirebaseConfig';
@@ -9,43 +9,60 @@ import Colors from '../../constant/Colors';
 
 export default function MedicationActionModal() {
     const params = useLocalSearchParams();
-    const router=useRouter();
+    const router = useRouter();
 
-    // params may come as strings; parse reminders if provided
+    // parse reminders if provided
     const reminders = (() => {
       try {
-        if(params?.reminders) return JSON.parse(params.reminders);
-        if(params?.reminder) return [params.reminder];
-      } catch(e) {
+        if (params?.reminders) return JSON.parse(params.reminders);
+        if (params?.reminder) return [params.reminder];
+      } catch (e) {
         return params?.reminders || [];
       }
       return [];
     })();
 
-    // if notification passed a specific time param, use it
     const specificTime = params?.time || null; // expecting "HH:mm" or null
     const selectedDate = params?.selectedDate;
 
-    const UpdateActionStatus=async(status, timeToUse)=>{
-        try{
-            const docRef=doc(db,'medication',params?.docId);
-            await updateDoc(docRef,{
-                action:arrayUnion({
-                    status:status,
-                    time: timeToUse || moment().format('LT'),
-                    date:selectedDate
-                })
-            });
+    const UpdateActionStatus = async (status, timeToUse) => {
+      try {
+        const docRef = doc(db, 'medication', params?.docId);
+        const snap = await getDoc(docRef);
+        const data = snap.exists() ? snap.data() : {};
+        const existing = Array.isArray(data.action) ? data.action : [];
 
-            Alert.alert(status,'Registrado!',[{
-                text:'Ok',
-                onPress:()=>router.replace('(tabs)')
-            }])
-        }catch(e)
-        {
-            console.log(e)
-        }
-    }
+        // normalize time format (use provided timeToUse or current time in HH:mm)
+        const normalizedTime = timeToUse || moment().format('HH:mm');
+
+        // remove any previous action for this date+time (so user can correct)
+        const filtered = existing.filter(
+          (a) => !(a.date === selectedDate && a.time === normalizedTime)
+        );
+
+        const newEntry = {
+          status,
+          time: normalizedTime,
+          date: selectedDate,
+          timestamp: Date.now(),
+        };
+
+        // save the updated actions array
+        await updateDoc(docRef, {
+          action: [...filtered, newEntry],
+        });
+
+        Alert.alert(status, 'Registrado!', [
+          {
+            text: 'Ok',
+            onPress: () => router.replace('(tabs)'),
+          },
+        ]);
+      } catch (e) {
+        console.log(e);
+        Alert.alert('Erro', 'Não foi possível registrar a ação.');
+      }
+    };
 
     // If there's a specific time passed (ex. from a notification), show single big buttons
     if (specificTime) {
@@ -93,7 +110,7 @@ export default function MedicationActionModal() {
               <View key={r} style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingVertical:8, borderBottomWidth:1, borderColor:'#eee'}}>
                 <Text style={{fontSize:18}}>{r}</Text>
                 <View style={{flexDirection:'row', gap:8}}>
-                  <TouchableOpacity style={[styles.smallBtn, {borderColor:'red'}]} onPress={()=> UpdateActionStatus('Não Tomou', r)}>
+                  <TouchableOpacity style={[styles.smallBtn, {backgroundColor:Colors.RED}]} onPress={()=> UpdateActionStatus('Não Tomou', r)}>
                     <Text style={{color:'white'}}>Não</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={[styles.smallBtn, {backgroundColor: Colors.GREEN}]} onPress={()=> UpdateActionStatus('Tomou', r)}>
@@ -146,8 +163,7 @@ const styles = StyleSheet.create({
       paddingHorizontal:10,
       paddingVertical:6,
       borderRadius:6,
-      backgroundColor:Colors.RED,
       justifyContent:'center',
       alignItems:'center'
     }
-}) 
+})

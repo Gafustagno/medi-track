@@ -1,3 +1,5 @@
+// app/(tabs)/History.jsx
+import { useIsFocused } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import moment from 'moment';
@@ -14,11 +16,19 @@ export default function History() {
   const [dateRange,setDateRange]=useState();
   const [loading,setLoading]=useState(false);
   const [medList,setMedList]=useState([]);
+  const isFocused = useIsFocused();
 
   useEffect(()=>{
     GetDateList();
     GetMedicationList(selectedDate);
   },[])
+
+  // Recarrega quando a aba fica em foco (p.ex. após action-modal)
+  useEffect(() => {
+    if (isFocused) {
+      GetMedicationList(selectedDate);
+    }
+  }, [isFocused, selectedDate]);
 
   const GetDateList=()=>{
     const dates=GetPrevDateRangeToDisplay();
@@ -50,7 +60,6 @@ export default function History() {
         if (!start.isValid()) return false;
 
         if (med.continuous) {
-          // se é contínuo, aparece para qualquer dia >= start
           return sel.isSameOrAfter(start, 'day');
         }
 
@@ -79,7 +88,7 @@ export default function History() {
         backgroundColor:'white'
       }}
       ListHeaderComponent={
-      <View style={styles?.mainContainer}>
+      <View style={styles.mainContainer}>
           <Image source={require('./../../assets/images/Health-Article-Box1.png')}
             style={styles.imageBanner}
           />
@@ -139,7 +148,6 @@ const styles = StyleSheet.create({
   mainContainer:{
     padding:20,
     backgroundColor:'white',
-    
   },
   imageBanner: {
     width: '100%',
