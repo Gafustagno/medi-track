@@ -1,5 +1,7 @@
+//constant/ConstantString.jsx
+
 export default{
-    NoMedication:'No Medication!',
-    MedicationSubText:'You have 0 medication setup, Kindly setup a new one',
-    AddNewMedicationBtn:'+ Add New Medication'
+    NoMedication:'Nada Cadastrado!',
+    MedicationSubText:'Nenhum medicamento cadastrado. Por favor, cadastre um medicamento.',
+    AddNewMedicationBtn:'+ Adicionar Novo Medicamento'
 }

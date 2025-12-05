@@ -1,8 +1,8 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+//components\Header.jsx
+
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import Colors from '../constant/Colors';
 import { getLocalStorage } from '../service/Storage';
 
 export default function Header() {
@@ -39,7 +39,7 @@ export default function Header() {
         gap:10,
     
       }}>
-        <Image source={require('./../assets/images/smiley.png')}
+        <Image source={require('./../assets/images/Mood_Happy.png')}
             style={{
                 width:40,
                 height:45
@@ -48,11 +48,22 @@ export default function Header() {
         <Text style={{
             fontSize:25,
             fontWeight:'bold'
-        }}>Hello {user?.displayName} 👋</Text>
+        }}>Olá, {user?.displayName}</Text>
+
+        <Image 
+  source={require('../assets/images/wavehello.png')} 
+  style={{ width: 42, height: 42 }} 
+/>
 
         </View>
         <TouchableOpacity onPress={()=>router.push('/add-new-medication')}>
-        <Ionicons name="medkit-outline" size={34} color={Colors.DARK_GRAY} />
+        <Image source={require('./../assets/images/Heart.png')}
+            style={{
+                height:43,
+                width:43,
+                resizeMode: 'contain'
+            }}
+            />
         </TouchableOpacity>
       </View>
     </View>

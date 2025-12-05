@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
 import { setLocalStorage } from '../../service/Storage';
-import { auth } from './../config/FirebaseConfig';
+import { auth } from '../../config/FirebaseConfig';
 
 export default function SignIn() {
 
@@ -16,7 +16,7 @@ export default function SignIn() {
 
       if(!email || !password)
       {
-        Alert.alert("Please enter email & password")
+        Alert.alert("Informe e-mail e senha")
         return;
       }
 
@@ -34,34 +34,36 @@ export default function SignIn() {
         const errorMessage = error.message;
         if(errorCode=="auth/invalid-credential")
         {
-          Alert.alert('Invalid email or password')
+          Alert.alert('E-mail ou senha inválidos')
         }
       });
     }
+
+  
   return (
     <View style={{
         padding:25
     }}>
-      <Text style={styles.textHeader}>Lets Sign You In</Text>
-      <Text style={styles.subText}>Welcome Back</Text>
-      <Text style={styles.subText}>You have been missed!</Text>
+      <Text style={styles.textHeader}/>
+      <Text style={styles.subText}/>
 
       <View style={{
         marginTop:25
       }}>
         <Text>Email</Text>
         <TextInput placeholder='Email' style={styles.textInput}
-        onChangeText={(value)=>setEmail(value)}
+        onChangeText={(value)=>setEmail(value)} autoComplete="off"
+        
         />
       </View>
 
       <View style={{
         marginTop:25
       }}>
-        <Text>Password</Text>
-        <TextInput placeholder='Password' style={styles.textInput}
+        <Text>Senha</Text>
+        <TextInput placeholder='Senha' style={styles.textInput}
         secureTextEntry={true}
-        onChangeText={(value)=>setPassword(value)}
+        onChangeText={(value)=>setPassword(value)} autoComplete="off"
         />
       </View>
 
@@ -82,7 +84,7 @@ export default function SignIn() {
             fontSize:17,
             color:Colors.PRIMARY,
             textAlign:'center'
-        }}>Create Account</Text>
+        }}>Criar conta</Text>
       </TouchableOpacity>
 
     </View>

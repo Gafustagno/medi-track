@@ -1,68 +1,76 @@
-import moment from "moment"
+//service\ConvertDateTime.jsx
 
-export const FormatDate=(timestamp)=>{
-    return new Date(timestamp).setHours(0,0,0,0)
-}
+import moment from "moment";
+import "moment/locale/pt-br";
 
-export const formatDateForText=(date)=>{
-    return moment(date).format('ll')
-}
+moment.locale("pt-br");
 
-export const formatTime=(timestamp)=>{
-    const date=new Date(timestamp);
-    const timeString=date.toLocaleTimeString([],{
-        hour:'2-digit',
-        minute:'2-digit'
-    })
+export const FormatDate = (timestamp) => {
+  return new Date(timestamp).setHours(0, 0, 0, 0);
+};
 
-    console.log(timeString)
-    return timeString; // 9:00 AM 
-}
+export const formatDateForText = (date) => {
+  return moment(date).format("L"); // Ex: 14 de outubro de 2025
+};
 
-export const getDatesRange=(startdate,endDate)=>{
-    const start=moment(new Date(startdate),'MM/DD/YYYY');
-    const end=moment(new Date(endDate),'MM/DD/YYYY');
-    const dates=[];
+export const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const timeString = date.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-    while(start.isSameOrBefore(end))
-    {
-        dates.push(start.format('MM/DD/YYYY'));
-        start.add(1,'days')
-    }
+  console.log(timeString);
+  return timeString; // Ex: 09:00
+};
 
-    return dates;
+export const getDatesRange = (startDate, endDate) => {
+  const start = moment(new Date(startDate), "DD/MM/YYYY");
+  const end = moment(new Date(endDate), "DD/MM/YYYY");
+  const dates = [];
 
-}
+  while (start.isSameOrBefore(end)) {
+    dates.push(start.format("L")); // Ex: 14/10/2025
+    start.add(1, "days");
+  }
 
-/**
- * 
- * @returns Get Next & Days List
- */
-export const GetDateRangeToDisplay=()=>{
-    const dateList=[];
-    for(let i=0;i<=7;i++)
-    {
-        dateList.push({
-            date:moment().add(i,'days').format('DD'), // 27
-            day:moment().add(i,'days').format('dd'), // Tue
-            formattedDate:moment().add(i,'days').format('L')// 12/27/2024
-        })
-    }
+  return dates;
+};
 
-    return dateList;
-}
+export const GetDateRangeToDisplay = () => {
+  const dateList = [];
+  for (let i = 0; i <= 7; i++) {
+    dateList.push({
+      date: moment().add(i, "days").format("DD"), // 27
+      day: moment().add(i, "days").format("dd"), // qua
+      formattedDate: moment().add(i, "days").format("L"), // 14/10/2025
+    });
+  }
 
-export const GetPrevDateRangeToDisplay=()=>{
-    const dates=[];
-    for(let i=0;i<=7;i++)
-    {
-        const date=moment().subtract(i,'days');
+  return dateList;
+};
 
-        dates.push({
-            date:date.format('DD'),
-            day:date.format('dd'),
-            formattedDate:date.format('L')
-        })
-    }
-    return dates;
-}
+export const GetPrevDateRangeToDisplay = () => {
+  const dates = [];
+  for (let i = 0; i <= 7; i++) {
+    const date = moment().subtract(i, "days");
+
+    dates.push({
+      date: date.format("DD"),
+      day: date.format("dd"),
+      formattedDate: date.format("L"),
+    });
+  }
+  return dates;
+};
+
+/* para converter de volta o horario de acordo com o q está salvo no firestore (em timestamp) qd o usuario vai editar o medicamento */
+export const timeStringToDate = (timeString) => {
+  if (!timeString) return new Date();
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(0);
+  return date;
+};

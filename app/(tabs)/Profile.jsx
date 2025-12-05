@@ -1,10 +1,12 @@
+// app\(tabs)\Profile.jsx
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { getAuth, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { getLocalStorage, RemoveLocalStorage } from '../../service/Storage';
-import app from '../config/FirebaseConfig';
+import app from '../../config/FirebaseConfig';
 import Colors from './../../constant/Colors';
 export default function Profile() {
 
@@ -12,19 +14,19 @@ export default function Profile() {
   const Menu = [
     {
       id: 1,
-      name: 'Add New Medication',
+      name: 'Adicionar Medicamento',
       icon: 'add-circle',
       path: '/add-new-medication'
     },
     {
       id: 5,
-      name: 'My Medication',
+      name: 'Meus Medicamentos',
       icon: 'medkit',
       path: '(tabs)'
     },
     {
       id: 2,
-      name: 'History',
+      name: 'Histórico',
       icon: 'time',
       path: '/History'
     },
@@ -68,14 +70,14 @@ export default function Profile() {
       <Text style={{
         fontFamily: 'outfit-medium',
         fontSize: 30
-      }}>Profile</Text>
+      }}/>
 
       <View style={{
         display: 'flex',
         alignItems: 'center',
         marginVertical: 25
       }}>
-        <Image source={require('./../../assets/images/smiley.png')} style={{
+        <Image source={require('./../../assets/images/Mood_Happy.png')} style={{
           width: 80,
           height: 80,
          

@@ -1,3 +1,5 @@
+// app\(tabs)\_layout.jsx
+
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs, useRouter } from 'expo-router';
 import { useEffect } from 'react';
@@ -35,14 +37,14 @@ export default function TabLayout() {
         }} />
       <Tabs.Screen name='History'
       options={{
-          tabBarLabel:'History',
+          tabBarLabel:'Histórico',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="history" size={size} color={color} />
           ),
-        }} />
+        }} /> 
       <Tabs.Screen name='Profile'
       options={{
-          tabBarLabel:'Profile',
+          tabBarLabel:'Perfil',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user" size={size} color={color} />
           ),

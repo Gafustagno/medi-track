@@ -1,3 +1,5 @@
+//app\login\index.jsx
+
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constant/Colors';
@@ -15,14 +17,14 @@ export default function LoginScreen() {
         }}
       >
         <Image
-          source={require('./../../assets/images/login.png')}
+          source={require('./../../assets/images/default.jpg')}
           style={styles.image}
         />
       </View>
 
       <View
         style={{
-          padding: 25,
+          padding: 70,
           backgroundColor: Colors.PRIMARY,
           height: '100%',
         }}
@@ -35,7 +37,7 @@ export default function LoginScreen() {
             textAlign: 'center',
           }}
         >
-          Stay on Track, Stay Health!
+          Viva com saúde no apocalipse!
         </Text>
 
         <Text
@@ -46,7 +48,7 @@ export default function LoginScreen() {
             marginTop: 20,
           }}
         >
-          Track your meds, take control of your health. Stay consistent, stay confident
+          Controle seus remédios. Cuidar da saúde é mais fácil do que matar zumbi.
         </Text>
 
           <TouchableOpacity style={styles?.button}
@@ -56,12 +58,12 @@ export default function LoginScreen() {
                 textAlign:'center',
                 fontSize:16,
                 color:Colors.PRIMARY
-            }}>Continue</Text>
+            }}>Continuar</Text>
           </TouchableOpacity>
           <Text style={{
             color:'white',
             marginTop:4
-          }}>Note: By Clicking Continue button, you will agree to our termas and conditions</Text>
+          }}></Text>
       </View>
     </View>
   );
@@ -69,10 +71,11 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   image: {
-    width: 210,
-    height: 450,
-    borderRadius: 23,
-  },
+  width: '100%',
+  height: 300,
+  resizeMode: 'cover',
+  borderRadius: 0,
+},
   button:{
     padding:15,
     backgroundColor:'white',

@@ -1,3 +1,5 @@
+//components\EmptyState.jsx
+
 import { useRouter } from 'expo-router';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constant/Colors';
@@ -13,10 +15,11 @@ export default function EmptyState() {
         display:'flex',
         alignItems:'center'
     }}>
-      <Image source={require('./../assets/images/medicine.png')}
+      <Image source={require('./../assets/images/medicine_zomboid.png')}
       style={{
-        width:120,
-        height:120
+        width:200,
+        height:200,
+        marginTop:-90
       }}
     />
     <Text style={{

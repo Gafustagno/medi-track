@@ -1,12 +1,12 @@
+//app\action-modal\index.jsx
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import moment from 'moment';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import MedicationCardItem from '../../components/MedicationCardItem';
 import Colors from '../../constant/Colors';
-import { db } from '../config/FirebaseConfig';
-
+import { db } from '../../config/FirebaseConfig';
 
 export default function MedicationActionModal() {
     const medicine=useLocalSearchParams();
@@ -23,7 +23,7 @@ export default function MedicationActionModal() {
                 })
             });
 
-            Alert.alert(status,'Response Saved!',[
+            Alert.alert(status,'Registrado!',[
                 {
                     text:'Ok',
                     onPress:()=>router.replace('(tabs)')
@@ -46,28 +46,27 @@ export default function MedicationActionModal() {
         />
         <Text style={{fontSize:18}}>{medicine?.selectedDate}</Text>
         <Text style={{fontSize:38,fontWeight:'bold',color:Colors.PRIMARY}}>{medicine?.reminder}</Text>
-        <Text style={{fontSize:18}}>It's time to take</Text>
-        
-        <MedicationCardItem medicine={medicine}/>
+        <Text style={{fontSize:18}}>É hora de tomar</Text>
+            
         
         <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.closeBtn}
-            onPress={()=>UpdateActionStatus('Missed')}
+            onPress={()=>UpdateActionStatus('Não Tomou')}
             >
-                    <Ionicons name="close-outline" size={24} color="red" />
+                    <Ionicons name="close-outline" size={24} color="white" left={5} />
                     <Text style={{
                         fontSize:20,
-                        color:'red'
-                    }}>Missed</Text>
+                        color:'red',
+                    }}></Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.successBtn}
-             onPress={()=>UpdateActionStatus('Taken')}
+             onPress={()=>UpdateActionStatus('Tomou')}
             >
-                    <Ionicons name="checkmark-outline" size={24} color="white" />
+                    <Ionicons name="checkmark-outline" size={24} color="white" left={5} />
                     <Text style={{
                         fontSize:20,
                         color:'white'
-                    }}>Taken</Text>
+                    }}></Text>
             </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -104,7 +103,8 @@ const styles = StyleSheet.create({
         borderWidth:1,
         alignItems:'center',
         borderColor:'red',
-        borderRadius:10
+        borderRadius:10,
+        backgroundColor:Colors.RED,
     },
     successBtn:{
         padding:10,

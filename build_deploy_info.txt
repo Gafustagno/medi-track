@@ -1,0 +1,70 @@
+1) para fazer o APK em um computador sem o projeto, no CMD:
+
+Build na nuvem (não precisa Android Studio nem SDK local)
+
+:: Pré-requisitos (uma vez no PC)
+npm i -g eas-cli
+eas login
+
+:: Clonar o branch mais atualizado (dev)
+git clone -b dev <URL-DO-REPO>
+cd <PASTA-DO-PROJETO>
+
+:: Instalar deps exatamente do lockfile
+npm ci
+
+:: (Opcional) checar compatibilidade
+npx expo-doctor
+
+:: Gerar APK na nuvem (profile de preview)
+eas build -p android --profile preview --clear-cache
+
+2) para fazer o APK em um computador já com o projeto e apenas dando pull:
+
+Também build na nuvem
+
+cd <PASTA-DO-PROJETO>
+
+:: Trazer o último commit do dev
+git pull origin dev
+
+:: Instalar deps conforme lockfile (garante versões idênticas)
+npm ci
+
+:: (Somente se você alterou app.json/plugins desde o último prebuild commitado)
+:: npx expo prebuild --clean --no-install
+:: git add android
+:: git commit -m "regenerate android native"
+
+:: Gerar APK na nuvem
+eas build -p android --profile preview --clear-cache
+
+3) para apenas dar pull no projeto e emular no Android Studio em um computador que já tem o projeto:
+
+Rodar localmente (debug) — precisa Android Studio + SDK
+
+cd <PASTA-DO-PROJETO>
+
+:: Atualizar o código
+git pull origin dev
+
+:: Instalar deps do lockfile
+npm ci
+
+:: Criar o local.properties (aponta pro seu SDK local)
+echo sdk.dir=C:/Users/%USERNAME%/AppData/Local/Android/Sdk > android\local.properties
+
+:: Incluir SDK nas variáveis de ambiente
+
+:: Abrir/emular um AVD no Android Studio 
+
+:: Compilar e instalar o app debug no emulador/dispositivo
+npx expo run:android
+
+:: (Depois de instalado, para só servir o JS em hot reload)
+npx expo start
+
+
+Dica: Se aparecer INSTALL_FAILED_UPDATE_INCOMPATIBLE, desinstale a versão release antes:
+
+adb uninstall com.leilanepapa.meditrack

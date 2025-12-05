@@ -1,3 +1,5 @@
+//app\(tabs)\index.jsx
+ 
 import { FlatList, View } from 'react-native'
 import Header from '../../components/Header'
 import MedicationList from '../../components/MedicationList'

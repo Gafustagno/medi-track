@@ -1,0 +1,4 @@
+# Criar arquivo local.properties na raiz da pasta Android com o caminho apontando para o SDK.
+# Como boa prática, também adicionar na variável de ambiente do seu usuário 
+# Caminho do SDK: C:/Users/seu_usuario/AppData/Local/Android/Sdk
+# Incluir no arquivo: sdk.dir=C:/CAMINHO/DO/SEU/SDK
