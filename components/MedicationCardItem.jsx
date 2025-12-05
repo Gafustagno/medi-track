@@ -1,8 +1,7 @@
-//components\MedicationCardItem.jsx
-
+// components/MedicationCardItem.jsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constant/Colors';
 import { TypeList } from '../constant/Options';
 
@@ -53,26 +52,32 @@ export default function MedicationCardItem({ medicine, selectedDate = '' , onDel
     });
   };
 
-  /* -> até aqui */
-
   useEffect(() => {
     CheckStatus();
   }, [medicine]);
 
   const CheckStatus = () => {
     try {
-      const data = medicine?.action?.find((item) => item?.date == selectedDate);
-      setStatus(data);
+      // ajustar lógica para múltiplos horários
+      const reminders = medicine.reminders || (medicine.reminder ? [medicine.reminder] : []);
+      const actionsToday = (medicine.action || []).filter(a => a.date === selectedDate);
+      if (actionsToday.length === 0) {
+        setStatus(null);
+        return;
+      }
+      const takenCount = reminders.filter(r => actionsToday.some(a => a.time === r && a.status === 'Tomou')).length;
+      setStatus({ takenCount, total: reminders.length });
     } catch (e) {}
   };
 
-  // 👇 função que retorna o ícone correto com base no tipo
   const getIconByType = (typeName) => {
     const foundType = TypeList.find(
       (item) => item.name.toLowerCase() === typeName?.toLowerCase()
     );
     return foundType ? foundType.icon : require('../assets/images/Antibiotics.png');
   };
+
+  const reminders = medicine.reminders || (medicine.reminder ? [medicine.reminder] : []);
 
   return (
     <TouchableOpacity
@@ -85,6 +90,7 @@ export default function MedicationCardItem({ medicine, selectedDate = '' , onDel
             ...medicine,
             selectedDate,
             docId: medicine.id,
+            reminders: JSON.stringify(reminders),
           },
         })
       }
@@ -107,22 +113,25 @@ export default function MedicationCardItem({ medicine, selectedDate = '' , onDel
 
       <View style={styles.reminderContainer}>
         <Ionicons name="timer-outline" size={22} color="black" />
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{medicine?.reminder}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+          {reminders.length === 1 ? reminders[0] : `${reminders[0]} ${reminders.length>1 ? `+${reminders.length-1}` : ''}`}
+        </Text>
       </View>
 
-      {status?.date && (
+      {status?.total && (
         <View style={styles.statusContainer}>
-          {status?.status == 'Tomou' ? (
+          {status.takenCount === status.total ? (
             <Ionicons name="checkmark-circle" size={24} color={Colors.GREEN} />
-          ) : status?.status == 'Não Tomou' ? (
+          ) : status.takenCount === 0 ? (
             <Ionicons name="close-circle" size={24} color="red" />
-          ) : null}
+          ) : (
+            <Text>{`${status.takenCount}/${status.total}`}</Text>
+          )}
         </View>
       )}
 
-       {/* Botões editar e excluir */}
-
-         <View style={{ flexDirection: "row", gap: 20, marginTop: 10 }}>
+    {/* Botões editar e excluir */}
+    <View style={{ flexDirection: "row", gap: 20, marginTop: 10 }}>
       <TouchableOpacity onPress={handleEdit}>
         <Ionicons name="create-outline" size={26} color="blue" />
       </TouchableOpacity>
@@ -170,4 +179,4 @@ const styles = StyleSheet.create({
     top: 5,
     padding: 7,
   },
-});
+}); 

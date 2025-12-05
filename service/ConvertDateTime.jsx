@@ -24,11 +24,20 @@ export const formatTime = (timestamp) => {
   return timeString; // Ex: 09:00
 };
 
-export const getDatesRange = (startDate, endDate) => {
-  const start = moment(new Date(startDate), "DD/MM/YYYY");
-  const end = moment(new Date(endDate), "DD/MM/YYYY");
-  const dates = [];
+export const getDatesRange = (startDate, endDate, maxDays = null) => {
+  const start = moment(new Date(startDate));
+  let end;
 
+  if (endDate) {
+    end = moment(new Date(endDate));
+  } else if (maxDays) {
+    end = moment(new Date(startDate)).add(maxDays, 'days');
+  } else {
+    // sem endDate e sem maxDays -> retorna apenas o start
+    end = moment(new Date(startDate));
+  }
+
+  const dates = [];
   while (start.isSameOrBefore(end)) {
     dates.push(start.format("L")); // Ex: 14/10/2025
     start.add(1, "days");
@@ -36,6 +45,7 @@ export const getDatesRange = (startDate, endDate) => {
 
   return dates;
 };
+
 
 export const GetDateRangeToDisplay = () => {
   const dateList = [];
@@ -74,3 +84,4 @@ export const timeStringToDate = (timeString) => {
   date.setSeconds(0);
   return date;
 };
+ 

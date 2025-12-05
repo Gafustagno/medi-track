@@ -1,5 +1,6 @@
 //components\MedicationList.jsx
 
+import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from 'expo-router';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import moment from 'moment';
@@ -11,7 +12,6 @@ import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
 import EmptyState from './EmptyState';
 import MedicationCardItem from './MedicationCardItem';
-import { useIsFocused } from "@react-navigation/native";
 
 
 
@@ -42,29 +42,54 @@ export default function MedicationList() {
         }
     
         const GetMedicationList=async(selectedDate)=>{
-            setLoading(true);
-            const user=await getLocalStorage('userDetail');
-            setMedList([]);
-            try{
-            const q=query(collection(db,'medication'),
-            where('userEmail','==',user?.email),
-            where('dates','array-contains',selectedDate));
-    
-    
-            const querySnapshot=await getDocs(q);
+    setLoading(true);
+    const user=await getLocalStorage('userDetail');
+    setMedList([]);
+    try{
+      const q=query(collection(db,'medication'),
+        where('userEmail','==',user?.email)
+      );
 
-            const list = querySnapshot.docs.map(docSnap => ({
-            id: docSnap.id,
-            ...docSnap.data(),
-            }));
+      const querySnapshot=await getDocs(q);
 
-            setMedList(list);
-            } catch (e) {
-                console.log(e);
-            }
+      const list = querySnapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      }));
 
-            setLoading(false);
-            };                      
+      // Filtrar localmente
+      const filtered = list.filter(med => {
+        // 1) se tem dates e contém selectedDate -> ok
+        if (Array.isArray(med.dates) && med.dates.includes(selectedDate)) return true;
+
+        // 2) fallback usando startDate/endDate/continuous
+        const sel = moment(selectedDate, 'L'); // seu selectedDate formato 'L' (DD/MM/YYYY)
+        if (!med.startDate) return false;
+
+        const start = moment(new Date(med.startDate));
+        if (!start.isValid()) return false;
+
+        if (med.continuous) {
+          return sel.isSameOrAfter(start, 'day');
+        }
+
+        if (med.endDate) {
+          const end = moment(new Date(med.endDate));
+          if (!end.isValid()) return false;
+          return sel.isBetween(start.clone().subtract(1,'day'), end.clone().add(1,'day'), 'day');
+        }
+
+        return false;
+      });
+
+      setMedList(filtered);
+    } catch (e) {
+        console.log(e);
+    }
+
+    setLoading(false);
+  };
+                       
             
       return (
     <View style={{ marginTop: 25 }}>
@@ -174,4 +199,4 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
   },
-});
+}); 

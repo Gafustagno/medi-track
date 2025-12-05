@@ -1,5 +1,4 @@
-//app\edit-medication\index.jsx
-
+// app/edit-medication/index.jsx
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -9,21 +8,22 @@ import { useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { db } from "../../config/FirebaseConfig";
 import Colors from "../../constant/Colors";
 import { TypeList, WhenToTake } from "../../constant/Options";
 import {
-  formatTime,
   FormatDate,
   formatDateForText,
+  formatTime,
   getDatesRange,
   timeStringToDate,
 } from "../../service/ConvertDateTime";
-import { db } from "../../config/FirebaseConfig";
 
 export default function EditMedicine() {
   const { id } = useLocalSearchParams();
@@ -39,8 +39,10 @@ export default function EditMedicine() {
     type: { name: "", icon: 0 },
     when: "",
     reminder: "",
+    reminders: [],
     startDate: "",
     endDate: "",
+    continuous: false,
   });
 
   // CARREGA DADOS DO FIRESTORE
@@ -63,10 +65,26 @@ export default function EditMedicine() {
         },
         when: data.when || "",
         reminder: data.reminder || "",
+        reminders: data.reminders || (data.reminder ? [data.reminder] : []),
         startDate: data.startDate || "",
         endDate: data.endDate || "",
+        continuous: data.continuous || false,
       });
     }
+  };
+
+  const addReminder = (timeString) => {
+    setForm(prev => ({
+      ...prev,
+      reminders: Array.from(new Set([...(prev.reminders || []), timeString]))
+    }));
+  };
+
+  const removeReminder = (timeString) => {
+    setForm(prev => ({
+      ...prev,
+      reminders: (prev.reminders || []).filter(r => r !== timeString)
+    }));
   };
 
   // SALVA EDIÇÕES NO FIRESTORE
@@ -75,10 +93,11 @@ export default function EditMedicine() {
     const snap = await getDoc(ref);
     const data = snap.data();
 
-    const newDates = getDatesRange(form.startDate, form.endDate);
+    const newDates = form.continuous ? [] : getDatesRange(form.startDate, form.endDate);
 
     await updateDoc(ref, {
       ...form,
+      reminder: form.reminders?.[0] ?? null,
       dates: newDates,
       action: data.action ?? [], // preserva histórico
     });
@@ -263,20 +282,38 @@ export default function EditMedicine() {
           )}
         </View>
 
-        {/* Horário do Lembrete */}
-        <View style={styles.inputGroup}>
-          <Ionicons
-            style={styles.icon}
-            name="timer-outline"
-            size={24}
-            color="black"
+        {/* Continuous */}
+        <View style={{flexDirection:'row', alignItems:'center', marginTop:10}}>
+          <Text style={{flex:1}}>Uso contínuo (sem data final)</Text>
+          <Switch
+            value={!!form.continuous}
+            onValueChange={(v) => setForm({...form, continuous: v})}
           />
+        </View>
+
+        {/* Horários (reminders) */}
+        <View style={{marginTop:12}}>
+          {(form.reminders || []).map((r)=>(
+            <View key={r} style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingVertical:6}}>
+              <Text>{r}</Text>
+              <TouchableOpacity onPress={()=> removeReminder(r)}>
+                <Text style={{color:'red'}}>Remover</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+
           <TouchableOpacity
-            style={{ flex: 1 }}
+            style={styles.inputGroup}
             onPress={() => setShowTimePicker(true)}
           >
+            <Ionicons
+              style={styles.icon}
+              name="timer-outline"
+              size={24}
+              color="black"
+            />
             <Text style={styles.text}>
-              {form.reminder ? form.reminder : "Selecionar Horário"}
+              {form.reminders?.[0] ? 'Adicionar outro horário' : 'Selecionar Horário'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -285,17 +322,14 @@ export default function EditMedicine() {
           <RNDateTimePicker
             mode="time"
             value={
-              form.reminder
-                ? timeStringToDate(form.reminder)
+              form.reminders?.[0]
+                ? timeStringToDate(form.reminders[0])
                 : new Date()
             }
             onChange={(event) => {
               if (event.type === "dismissed")
                 return setShowTimePicker(false);
-              setForm({
-                ...form,
-                reminder: formatTime(event.nativeEvent.timestamp),
-              });
+              addReminder(formatTime(event.nativeEvent.timestamp));
               setShowTimePicker(false);
             }}
           />
@@ -377,4 +411,4 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 10,
   },
-});
+}); 

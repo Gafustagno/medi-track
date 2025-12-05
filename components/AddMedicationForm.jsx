@@ -1,23 +1,23 @@
-//components\AddMedicationForm.jsx
-
+// components/AddMedicationForm.jsx
 import Ionicons from '@expo/vector-icons/Ionicons';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { db } from '../config/FirebaseConfig';
 import Colors from '../constant/Colors';
 import { FormatDate, formatDateForText, formatTime, getDatesRange, timeStringToDate } from '../service/ConvertDateTime';
 import { getLocalStorage } from '../service/Storage';
 import { TypeList, WhenToTake } from './../constant/Options';
 
-
-
 export default function AddMedicationForm() {
 
-  const [formData, setFormData] =useState({});
+  const [formData, setFormData] = useState({
+    reminders: [],
+    continuous: false,
+  });
   const [showStartDate,setShowStartDate]=useState(false);
   const [showEndDate,setShowEndDate]=useState(false);
   const [showTimePicker,setShowTimePicker]=useState(false);
@@ -29,40 +29,53 @@ export default function AddMedicationForm() {
       ...prev,
       [field]:value
     }));
-    console.log(formData);
+  }
+
+  const addReminder = (timeString) => {
+    setFormData(prev=>{
+      const next = Array.from(new Set([...(prev.reminders||[]), timeString])); // evita duplicados
+      return {
+        ...prev,
+        reminders: next,
+      };
+    });
+  }
+
+  const removeReminder = (timeString) => {
+    setFormData(prev=>({
+      ...prev,
+      reminders: (prev.reminders || []).filter(r => r !== timeString)
+    }));
   }
 
    const SaveMedication=async()=>{
        const docId=Date.now().toString();
        const user=await getLocalStorage('userDetail');
        
-       if(!(formData?.name && formData?.type && formData?.dose && formData?.startDate && formData?.endDate && formData?.reminder))
+       // validação: se continuous true, endDate não é obrigatório
+       if(!(formData?.name && formData?.type && formData?.dose && formData?.startDate && (formData?.continuous || formData?.endDate) && formData?.reminders?.length))
        {
-         
-          Alert.alert('Entre todos os campos');
+          Alert.alert('Preencha todos os campos obrigatórios');
           return ;
        }
     
-    const dates=getDatesRange(formData?.startDate,formData.endDate);
-         console.log(dates);
+    const dates = formData.continuous ? [] : getDatesRange(formData?.startDate, formData.endDate);
          setLoading(true);
          
          try{
             await setDoc(doc(db,'medication',docId),{
               ...formData,
+              reminder: formData.reminders?.[0] ?? null, // compat
               userEmail:user?.email,
               docId:docId,
               dates:dates
             });
     
-            console.log('Data Registrada!');
             setLoading(false);
-            Alert.alert('Ótimo!','Medicamento cadastrado com sucesso!',[
-              {
-                text:'Ok',
-                onPress:()=>router.push('(tabs)')
-              }
-            ])
+            Alert.alert('Ótimo!','Medicamento cadastrado com sucesso!',[{
+              text:'Ok',
+              onPress:()=>router.push('(tabs)')
+            }])
          }catch(e)
          {
           setLoading(false);
@@ -71,9 +84,7 @@ export default function AddMedicationForm() {
       }
 
   return (
-    <View style={{
-      padding:25
-    }}>
+    <View style={{ padding:25 }}>
 
       <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="medkit-outline" size={24} color="black" />
@@ -87,28 +98,23 @@ export default function AddMedicationForm() {
       <FlatList
         data={TypeList}
         horizontal
-        style={{
-          marginTop:5
-        }}
+        style={{ marginTop:5 }}
         showsHorizontalScrollIndicator={false}
         renderItem={({item, index}) =>(
             <TouchableOpacity style={[styles.inputGroup,{marginRight:10},
               {backgroundColor:item.name==formData?.type?.name?Colors.PRIMARY:'white'}
-
             ]}
               onPress={()=>onHandleInputChange('type',item)}
             >
               <Text style={[styles.typeText,
                 {color:item.name==formData?.type?.name?'white':'black'}
-
               ]}>{item?.name}</Text>
-
             </TouchableOpacity>
         )}
       />
 
-        {/* input de doses */}
-        <View style={styles.inputGroup}>
+      {/* Dose */}
+      <View style={styles.inputGroup}>
           <Ionicons style={styles.icon} name="eyedrop-outline" size={24} color="black" />
           <TextInput style={styles.textInput} placeholder='Dose - Ex: 2,5ml'
             onChangeText={(value)=> onHandleInputChange('dose',value)}
@@ -116,88 +122,103 @@ export default function AddMedicationForm() {
           />
       </View>
 
-        {/* dropdown quando tomar  */}
-              <View style={styles.inputGroup}>
-                <Ionicons style={styles.icon} name="time-outline" size={24} color="black" />
-                <Picker
-                  selectedValue={formData?.when}
-                  
-                  onValueChange={(itemValue,itemIndex)=>
-                    onHandleInputChange('when',itemValue)
-                  }
-                  style={{
-                    width:'90%'
-                  }}
-                >
-                  {WhenToTake.map((item,index)=>(
-                    <Picker.Item key={index} label={item} value={item} />
-                  ))}
-                </Picker>
-              </View>
-        
-          {/* data inicial e final  */}
-              <View style={styles.dateInputGroup}>
-                <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
-                onPress={()=>setShowStartDate(true)}
-                >
-                  <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
-                  <Text style={styles.text}>{formatDateForText(formData?.startDate)??'Start Date'}</Text>
-                 
-                </TouchableOpacity>
-                {showStartDate&& <RNDateTimePicker
-                    minimumDate={new Date()}
-                    onChange={(event)=>{
-                      onHandleInputChange('startDate', FormatDate(event.nativeEvent.timestamp));
-                      setShowStartDate(false)
-                    }}
-                    value={new Date(formData?.startDate)??new Date()}
-                  />}
-                <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
-                onPress={()=>setShowEndDate(true)}
-                >
-                  <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
-                  <Text style={styles.text}>{formatDateForText( formData?.endDate)??'End Date'}</Text>
-                </TouchableOpacity>
-                {showEndDate&& <RNDateTimePicker
-                    minimumDate={new Date()}
-                    onChange={(event)=>{
-                      onHandleInputChange('endDate', FormatDate(event.nativeEvent.timestamp));
-                      setShowEndDate(false)
-                    }}
-                    value={new Date(formData?.endDate)??new Date()}
-                  />}
-              </View>
+      {/* Quando tomar */}
+      <View style={styles.inputGroup}>
+        <Ionicons style={styles.icon} name="time-outline" size={24} color="black" />
+        <Picker
+          selectedValue={formData?.when}
+          onValueChange={(itemValue)=> onHandleInputChange('when',itemValue)}
+          style={{ width:'90%' }}
+        >
+          {WhenToTake.map((item,index)=>(
+            <Picker.Item key={index} label={item} value={item} />
+          ))}
+        </Picker>
+      </View>
 
-          {/* selecionar horario  */}
-                <View style={styles.dateInputGroup}>
-                  <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
-                  onPress={()=>setShowTimePicker(true)}
-                  >
-                    <Ionicons style={styles.icon} name="timer-outline" size={24} color="black" />
-                    <Text style={styles.text}>{formData?.reminder??'Selecionar Horário'}</Text>
-                   
-                  </TouchableOpacity>
-          
-                  </View>
+      {/* Período */}
+      <View style={styles.dateInputGroup}>
+        <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
+          onPress={()=>setShowStartDate(true)}
+        >
+          <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
+          <Text style={styles.text}>{formatDateForText(formData?.startDate)??'Start Date'}</Text>
+        </TouchableOpacity>
+        {showStartDate && <RNDateTimePicker
+            minimumDate={new Date()}
+            onChange={(event)=>{
+              if(event.type === 'dismissed') return setShowStartDate(false);
+              onHandleInputChange('startDate', FormatDate(event.nativeEvent.timestamp));
+              setShowStartDate(false)
+            }}
+            value={ formData?.startDate ? new Date(formData.startDate) : new Date() }
+          />}
 
-          {showTimePicker&&  <RNDateTimePicker
-                  mode='time'
-                  onChange={(event)=>{
-                    onHandleInputChange('reminder',formatTime(event.nativeEvent.timestamp))
-                    setShowTimePicker(false)
-                  }}
-                  value={timeStringToDate(formData?.reminder)}          
-                  />}
-          
-                  <TouchableOpacity style={styles.button}
-                  onPress={()=>SaveMedication()}
-                  >
-                   {loading? <ActivityIndicator size={'large'} color={'white'}/>:
-                    <Text style={styles.buttontext}>Adicionar Novo Medicamento</Text>}
-                  </TouchableOpacity>
+        <TouchableOpacity style={[styles.inputGroup,{flex:1}]}
+          onPress={()=>setShowEndDate(true)}
+        >
+          <Ionicons style={styles.icon} name="calendar-outline" size={24} color="black" />
+          <Text style={styles.text}>{formatDateForText( formData?.endDate)??'End Date'}</Text>
+        </TouchableOpacity>
+        {showEndDate && <RNDateTimePicker
+            minimumDate={new Date()}
+            onChange={(event)=>{
+              if(event.type === 'dismissed') return setShowEndDate(false);
+              onHandleInputChange('endDate', FormatDate(event.nativeEvent.timestamp));
+              setShowEndDate(false)
+            }}
+            value={ formData?.endDate ? new Date(formData.endDate) : new Date() }
+          />}
+      </View>
+
+      {/* Continuous switch */}
+      <View style={{flexDirection:'row', alignItems:'center', marginTop:10}}>
+        <Text style={{flex:1}}>Uso contínuo (sem data final)</Text>
+        <Switch
+          value={!!formData.continuous}
+          onValueChange={(v)=> onHandleInputChange('continuous', v)}
+        />
+      </View>
+
+      {/* Reminders list */}
+      <View style={{marginTop:12}}>
+        <Text style={{fontWeight:'600', marginBottom:6}}>Horários</Text>
+        {(formData.reminders || []).map((r)=>(
+          <View key={r} style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingVertical:6}}>
+            <Text>{r}</Text>
+            <TouchableOpacity onPress={()=> removeReminder(r)}>
+              <Text style={{color:'red'}}>Remover</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        <TouchableOpacity style={[styles.inputGroup, {marginTop:8}]}
+          onPress={()=> setShowTimePicker(true)}
+        >
+          <Ionicons style={styles.icon} name="timer-outline" size={24} color="black" />
+          <Text style={styles.text}>Adicionar Horário</Text>
+        </TouchableOpacity>
+      </View>
+
+      {showTimePicker &&  <RNDateTimePicker
+            mode='time'
+            onChange={(event)=>{
+              if(event.type === 'dismissed') return setShowTimePicker(false);
+              const t = formatTime(event.nativeEvent.timestamp); // "HH:mm"
+              addReminder(t);
+              setShowTimePicker(false);
+            }}
+            value={ timeStringToDate(formData?.reminders?.[0]) ?? new Date() }          
+          />}
+
+      <TouchableOpacity style={styles.button}
+        onPress={()=>SaveMedication()}
+      >
+       {loading? <ActivityIndicator size={'large'} color={'white'}/>:
+        <Text style={styles.buttontext}>Adicionar Novo Medicamento</Text>}
+      </TouchableOpacity>
 
     </View>
-    
   )
 }
 
@@ -253,4 +274,4 @@ const styles= StyleSheet.create({
     color:'white',
     textAlign:'center'
   }
-})
+}) 
